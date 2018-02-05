@@ -1,0 +1,47 @@
+.navbar {
+    position: relative;
+    height: 4em;
+    max-height: 4em;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+.navbar-default {
+    background-color: #eee;
+    border-color: #d5d5d5;
+}
+
+.clarin-logo {
+    min-height: 50px;
+    width: 119px;
+    background-image: url(https://vlo.clarin.eu/images/clarin-logo-wide.png);
+    background-size: 115px 46px;
+    background-position-x: 5px;
+    background-position-y: 2px;
+    background-repeat: no-repeat;
+}
+
+li.clarin-logo a span {
+    display: none;
+}
+
+.navbar-default .navbar-brand {
+    color: #000;
+}
+
+.navbar-brand {
+    float: left;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+    height: 50px;
+}
+
+.navbar-brand svg {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #000;
+}
