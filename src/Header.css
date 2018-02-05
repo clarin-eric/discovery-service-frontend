@@ -12,16 +12,11 @@
 }
 
 .clarin-logo {
-    min-height: 50px;
+    height: 50px;
     width: 119px;
-    background-image: url(https://vlo.clarin.eu/images/clarin-logo-wide.png);
-    background-size: 115px 46px;
-    background-position-x: 5px;
-    background-position-y: 2px;
-    background-repeat: no-repeat;
 }
 
-li.clarin-logo a span {
+a.clarin-logo span {
     display: none;
 }
 

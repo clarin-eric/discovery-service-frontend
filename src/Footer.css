@@ -1,9 +1,15 @@
 #footer {
+    margin-top: 0em;
     min-height: 10em;
     max-height: 10em;
     height: 10em;
     padding-top: 30px;
     border-top: 1px solid #d5d5d5;
     background-color: #eee;
+    color: #777;
+    font-size: 0.85em;
+}
+
+#footer .footer-fineprint, #footer .footer-fineprint a {
     color: #777;
 }

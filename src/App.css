@@ -1,3 +1,12 @@
+#main {
+  min-height: 99%;
+  padding-top: 5em;
+  margin-top: -5em;
+  padding-bottom: 10em;
+  margin-bottom: -8em; /*leave space for header footer*/
+  background-color: #fff;
+}
+
 .main {
   text-align: center;
   width: 100%;
