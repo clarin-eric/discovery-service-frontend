@@ -12,11 +12,7 @@ class Header extends Component {
                         <a href="/"><i class="far fa-id-card fa-lg"></i>CLARIN Discovery Service</a>
                     </Navbar.Brand>
                 </Navbar.Header>
-                <Nav>
-                    <NavItem eventKey={1} href="#">
-                        Link
-                    </NavItem>
-                </Nav>
+                <Nav></Nav>
                 <Nav>
                     <Navbar.Text >
                         <a href="https://www.clarin.eu" className="hidden-xs"><img src={logo} alt="logo" className="clarin-logo"></img></a>

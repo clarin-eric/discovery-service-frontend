@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Row, Col} from 'react-bootstrap';
-import './Home.css';
 
 class Home extends Component {
     render() {
