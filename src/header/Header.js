@@ -13,10 +13,10 @@ class Header extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav></Nav>
-                <Nav>
-                    <Navbar.Text >
-                        <a href="https://www.clarin.eu" className="hidden-xs"><img src={logo} alt="logo" className="clarin-logo"></img></a>
-                    </Navbar.Text>
+                <Nav pullRight>
+                    <NavItem href="https://www.clarin.eu" className="clarin-logo-item">
+                        <img src={logo} alt="logo" className="clarin-logo"></img>
+                    </NavItem>
                 </Nav>
             </Navbar>
         );
