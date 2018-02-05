@@ -1,0 +1,10 @@
+.idp {
+    border: 1px solid #000000;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 5px;
+}
+
+.idp:hover {
+    background-color: #efefef;
+}
