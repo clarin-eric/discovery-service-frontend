@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Button} from 'react-bootstrap';
 import Idp from './Idp';
 
 class IdpList extends Component {
@@ -9,8 +9,14 @@ class IdpList extends Component {
         let isFetching = this.props.isFetching;
         let idps = this.props.idps.items;
 
-        let rows = null;
+        let selected = null;
+        selected = (<Row>
+            <Col lg={4} lgOffset={4}>
+                <Idp name={"abc"} country={"nl"} icon={null}/>
+            </Col>
+        </Row>);
 
+        let rows = null;
         if(isFetching) {
             rows = (
                 <Row>
@@ -30,7 +36,22 @@ class IdpList extends Component {
         }
         return (
             <div className="idpList">
+                {selected}
+                <Row>
+                    <Col lg={4} lgOffset={4}>
+                        <input value="Search for your home organization..." width="100%"></input>
+                    </Col>
+                </Row>
                 {rows}
+                <Row>
+                    <Col lg={4} lgOffset={4}>
+                        <Row>
+                            <Col lg={4}><Button onClick={e => {e.preventDefault(); this.props.previousPageClick()}}>P</Button></Col>
+                            <Col lg={4}>-</Col>
+                            <Col lg={4}><Button onClick={e => {e.preventDefault(); this.props.nextPageClick()}}>N</Button></Col>
+                        </Row>
+                    </Col>
+                </Row>
             </div>
         );
     }
@@ -40,7 +61,9 @@ IdpList.propTypes = {
     idps: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
         items: PropTypes.array.isRequired
-    }).isRequired
+    }).isRequired,
+    previousPageClick: PropTypes.func.isRequired,
+    nextPageClick: PropTypes.func.isRequired,
 };
 
 IdpList.defaultProps = {

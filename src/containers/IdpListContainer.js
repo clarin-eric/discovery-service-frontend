@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import IdpList from '../pages/IdpList'
+import { nextPageIdps, previousPageIdps } from '../actions'
 
 const getVisibleIdps = (idps, filter) => {
     switch (filter) {
@@ -11,7 +12,7 @@ const getVisibleIdps = (idps, filter) => {
         default:
             return {
                 isFetching: idps.isFetching,
-                items: idps.items.slice(0,10)
+                items: idps.items.slice(idps.index,idps.index+idps.show)
             }
     }
 }
@@ -23,7 +24,14 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        nextPageClick: () => {
+            dispatch(nextPageIdps())
+        },
+        previousPageClick: () => {
+            dispatch(previousPageIdps())
+        },
+    }
 }
 
 const VisibleIdpList = connect(
