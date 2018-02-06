@@ -9,7 +9,7 @@ class Header extends Component {
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/"><i class="far fa-id-card fa-lg"></i>CLARIN Discovery Service</a>
+                        <a href="/"><i className="far fa-id-card fa-lg"></i>CLARIN Discovery Service</a>
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav></Nav>

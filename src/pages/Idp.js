@@ -262,13 +262,13 @@ class Idp extends Component {
         var country_code = this.props.country.toUpperCase()
         var country_label = countries[country_code];
         var img = country_code.toLowerCase()+".png";
-        if( this.props.country === 'eu' ) {
+        if( country_code === 'EU' ) {
             img = "europeanunion.png"
         }
 
         var logo = null;
-        if(this.props.logo !== "") {
-            logo = (<img className="logo" src={this.props.logo} alt="logo"></img>)
+        if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
+            logo = (<img className="logo" src={this.props.icon.url} alt="logo"></img>)
         }
 
         return (
@@ -288,7 +288,11 @@ class Idp extends Component {
 Idp.propTypes = {
     name: PropTypes.string.isRequired,
     country: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired,
+    icon: PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+        height: PropTypes.number.isRequired,
+    }),
 };
 
 Idp.defaultProps = {
