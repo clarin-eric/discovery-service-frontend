@@ -1,18 +1,17 @@
 import { connect } from 'react-redux'
 import IdpList from '../pages/IdpList'
-import { nextPageIdps, previousPageIdps } from '../actions'
+import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp } from '../actions'
 
 const getVisibleIdps = (idps, filter) => {
     switch (filter) {
-        //case 'SHOW_COMPLETED':
-        //    return todos.filter(t => t.completed)
-        //case 'SHOW_ACTIVE':
-        //    return todos.filter(t => !t.completed)
         case 'SHOW_ALL':
         default:
             return {
                 isFetching: idps.isFetching,
-                items: idps.items.slice(idps.index,idps.index+idps.show)
+                index: idps.index,
+                show: idps.show,
+                total: idps.items.length,
+                items: idps.filtered.slice(idps.index,idps.index+idps.show)
             }
     }
 }
@@ -30,6 +29,15 @@ const mapDispatchToProps = dispatch => {
         },
         previousPageClick: () => {
             dispatch(previousPageIdps())
+        },
+        patternChange: (pattern) => {
+            dispatch(searchIdp(pattern))
+        },
+        firstPageClick: () => {
+            dispatch(firstPageIdps())
+        },
+        lastPageClick: () => {
+            dispatch(lastPageIdps())
         },
     }
 }

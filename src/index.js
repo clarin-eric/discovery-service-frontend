@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import thunkMiddleware from 'redux-thunk'
-import loggerMiddleware from 'redux-logger'
+//import loggerMiddleware from 'redux-logger'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
@@ -15,7 +15,7 @@ let store = createStore(
     idpApp,
     applyMiddleware(
         thunkMiddleware, // lets us dispatch() functions
-        loggerMiddleware // neat middleware that logs actions
+//        loggerMiddleware // neat middleware that logs actions
     )
 );
 

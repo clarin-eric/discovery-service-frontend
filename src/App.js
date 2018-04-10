@@ -4,23 +4,28 @@ import Header from './header/Header.js';
 import Footer from './footer/Footer.js';
 import Home from './pages/Home.js';
 import About from './pages/About.js';
+import { CookiesProvider } from 'react-cookie';
 import './App.css';
 
 class App extends Component {
     render() {
         return (
+
             <Router>
-                <div className="main">
-                    <Header />
-                    <div id="main">
-                        <div className="container">
-                            <Route exact path="/" component={Home}/>
-                            <Route path="/about" component={About}/>
+                <CookiesProvider>
+                    <div className="main">
+                        <Header />
+                        <div id="main">
+                            <div className="container">
+                                <Route exact path="/" component={Home}/>
+                                <Route path="/about" component={About}/>
+                            </div>
                         </div>
+                        <Footer />
                     </div>
-                    <Footer />
-                </div>
+                </CookiesProvider>
             </Router>
+
         );
     }
 }

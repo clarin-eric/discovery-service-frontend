@@ -4,10 +4,12 @@
     margin-bottom: 3px;
     padding: 5px;
     text-align: left;
+    min-height: 70px;
+    max-height: 70px;
 }
 
 .idp:hover {
-    background-color: #efefef;
+    background-color: #eee;
 }
 
 .idp-country img {
@@ -23,4 +25,8 @@
     max-height: 50px;
     max-width: 200px;
     margin-top: 5px;
+}
+
+.previous-selected-idp {
+    margin-bottom: 25px;
 }

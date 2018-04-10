@@ -40,3 +40,7 @@
   to { transform: rotate(360deg); }
 }
 
+.stats {
+  font-size: 0.85em;
+}
+
