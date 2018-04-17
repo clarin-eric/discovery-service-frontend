@@ -1,20 +1,44 @@
 import React, { Component } from 'react';
+import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
 import {Row, Col, Button, ButtonGroup, InputGroup, FormControl} from 'react-bootstrap';
 import Idp from './Idp';
+import { withCookies, Cookies } from 'react-cookie';
 
 class IdpList extends Component {
 
-    render() {
-        let isFetching = this.props.isFetching;
-        let idps = this.props.idps.items;
+    componentWillMount() {
+        const { cookies } = this.props;
 
+        //Set the selected idp entity id if a cookie with a valid value exists
+        var entityId = cookies.get('entityid')
+        if (entityId) {
+            this.props.setSelectedIdp(entityId)
+        } else {
+            console.log("No selected entityId found");
+        }
+    }
+
+    render() {
+        const { isFetching } = this.props;
+        let idps = this.props.idps.items;
+        let selected_idp = this.props.idps.selected_idp;
+
+        //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
-        selected = (<Row className="previous-selected-idp">
-            <Col lg={4} lgOffset={4}>
-                <Idp name={"abc"} country={"nl"} icon={null}/>
-            </Col>
-        </Row>);
+        if(selected_idp) {
+            selected = (<Row className="previous-selected-idp"
+                             onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, selected_idp.entityID)}}>
+                <Col lg={4} lgOffset={4}>
+                    <Idp
+                        name={selected_idp.titles[0].value}
+                        country={selected_idp.country}
+                        icon={selected_idp.icon}
+
+                    />
+                </Col>
+            </Row>);
+        }
 
         let rows = null;
         if(isFetching) {
@@ -27,7 +51,7 @@ class IdpList extends Component {
             );
         } else {
             rows = idps.map(idp => (
-                <Row key={idp.entityID}>
+                <Row key={idp.entityID} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}}>
                     <Col lg={6} lgOffset={3}>
                         <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
                     </Col>
@@ -92,22 +116,27 @@ class IdpList extends Component {
 }
 
 IdpList.propTypes = {
+    cookies: instanceOf(Cookies).isRequired,
     idps: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
         index: PropTypes.number.isRequired,
         show: PropTypes.number.isRequired,
         total: PropTypes.number.isRequired,
         items: PropTypes.array.isRequired,
+        selected_entityId: PropTypes.string,
+        selected_idp: PropTypes.shape({})
     }).isRequired,
     previousPageClick: PropTypes.func.isRequired,
     nextPageClick: PropTypes.func.isRequired,
     firstPageClick: PropTypes.func.isRequired,
     lastPageClick: PropTypes.func.isRequired,
     patternChange: PropTypes.func.isRequired,
+    idpClick: PropTypes.func.isRequired,
+    setSelectedIdp: PropTypes.func.isRequired,
 };
 
 IdpList.defaultProps = {
     idps:[],
 };
 
-export default IdpList;
+export default withCookies(IdpList);

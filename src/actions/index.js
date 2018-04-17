@@ -5,6 +5,9 @@ export const PREVIOUS_PAGE_IDPS = 'PREVIOUS_PAGE_IDPS'
 export const FIRST_PAGE_IDPS = 'FIRST_PAGE_IDPS'
 export const LAST_PAGE_IDPS = 'LAST_PAGE_IDPS'
 export const SEARCH_IDPS = 'SEARCH_IDPS'
+export const CLICKED_IDP = 'CLICKED_IDP'
+export const SELECTED_IDP = 'SELECTED_IDP'
+export const SET_QUERY_PARAMETERS = 'SET_QUERY_PARAMETERS'
 
 /**
  * Request download if IDP json data
@@ -85,5 +88,28 @@ export function fetchIdps() {
         return fetch(`identity_providers.json`)
             .then(response => response.json())
             .then(json => dispatch(receiveIdps(json)))
+    }
+}
+
+export function idpClick(cookies, entityId) {
+    return {
+        type: CLICKED_IDP,
+        entityId: entityId,
+        cookies: cookies
+    }
+}
+
+export function selectIdp(entityId) {
+    return {
+        type: SELECTED_IDP,
+        entityId: entityId
+    }
+}
+
+export function createQueryParametersAction(sp_entity_id, sp_return) {
+    return {
+        type: SET_QUERY_PARAMETERS,
+        sp_entity_id: sp_entity_id,
+        sp_return: sp_return
     }
 }

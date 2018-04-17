@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import IdpList from '../pages/IdpList'
-import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp } from '../actions'
+import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp, idpClick, selectIdp } from '../actions'
 
 const getVisibleIdps = (idps, filter) => {
     switch (filter) {
@@ -11,7 +11,9 @@ const getVisibleIdps = (idps, filter) => {
                 index: idps.index,
                 show: idps.show,
                 total: idps.items.length,
-                items: idps.filtered.slice(idps.index,idps.index+idps.show)
+                items: idps.filtered.slice(idps.index,idps.index+idps.show),
+                selected_entityId: idps.selected_entityId,
+                selected_idp: idps.selected_idp
             }
     }
 }
@@ -39,6 +41,12 @@ const mapDispatchToProps = dispatch => {
         lastPageClick: () => {
             dispatch(lastPageIdps())
         },
+        idpClick: (cookies, entityId) => {
+            dispatch(idpClick(cookies, entityId))
+        },
+        setSelectedIdp: (entityId) => {
+            dispatch(selectIdp(entityId))
+        }
     }
 }
 
