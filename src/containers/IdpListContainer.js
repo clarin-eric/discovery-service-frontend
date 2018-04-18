@@ -13,7 +13,8 @@ const getVisibleIdps = (idps, filter) => {
                 total: idps.items.length,
                 items: idps.filtered.slice(idps.index,idps.index+idps.show),
                 selected_entityId: idps.selected_entityId,
-                selected_idp: idps.selected_idp
+                selected_idp: idps.selected_idp,
+                countries: idps.countries,
             }
     }
 }

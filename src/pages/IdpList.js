@@ -58,6 +58,12 @@ class IdpList extends Component {
                 </Row>
             ));
         }
+
+        let countries = null;
+        countries = this.props.idps.countries.map(country => (
+            <option value={country} key={country}>{country}</option>
+        ));
+
         return (
             <div className="idpList">
                 {selected}
@@ -75,8 +81,7 @@ class IdpList extends Component {
                     <Col lg={2}>
                         <FormControl componentClass="select" placeholder="filter">
                         <option value="filter">Filter by country</option>
-                            <option value="eu">eu</option>
-                            <option value="nl">nl</option>
+                            {countries}
                         </FormControl>
                     </Col>
                 </Row>
@@ -124,7 +129,8 @@ IdpList.propTypes = {
         total: PropTypes.number.isRequired,
         items: PropTypes.array.isRequired,
         selected_entityId: PropTypes.string,
-        selected_idp: PropTypes.shape({})
+        selected_idp: PropTypes.shape({}),
+        countries: PropTypes.array.isRequired,
     }).isRequired,
     previousPageClick: PropTypes.func.isRequired,
     nextPageClick: PropTypes.func.isRequired,

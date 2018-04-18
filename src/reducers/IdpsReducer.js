@@ -11,7 +11,33 @@ import {
     SELECTED_IDP, SET_QUERY_PARAMETERS,
 } from '../actions'
 
-const idp_list = (state = {isFetching: false, index: 0, show: 10, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
+/**
+ * state =
+ *  {
+ *      countries: [],              //list of unique countries, derived from the list of IdPs
+ *      isFetching: false,          //are we currently fetching the list of IdPs
+ *      index: 0,                   //starting index
+ *      show: 10,                   //number of IdPs to show at the same time
+ *      items: [],                  //full list of IdPs
+ *      filtered: [],               //filtered list of IdPs
+ *      selected_entityId: null,    //entityID of the previously selected IdP or null
+ *      selected_idp: null          //the IdP object for the selected IdP or null
+ *  }
+ *
+ *  IDP object:
+ *   {
+ *      "country": "EU",
+ *      "entityID": "https://test-idp.clarin.eu",
+ *      "geo": {"lat":48.25,"lon":11.65},
+ *      "icon": {"url":"https://www.clarin.eu/sites/default/files/clarin-logo.png","width":195,"height":220},
+ *      "titles": [{"language":"en","value":"clarin.eu website account [TEST]"}],
+ *      "weight": 100
+ *    }
+ * @param state
+ * @param action
+ * @returns {*}
+ */
+const idp_list = (state = {countries: [], isFetching: false, index: 0, show: 10, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
         case REQUEST_IDPS:
@@ -20,11 +46,12 @@ const idp_list = (state = {isFetching: false, index: 0, show: 10, items: [], fil
             })
         case RECEIVE_IDPS:
             return Object.assign({}, state, {
+                countries: getCountries(action.idps),
                 isFetching: false,
                 items: action.idps,
                 filtered: action.idps,
                 lastUpdated: action.receivedAt,
-                //selected_entityId: state.selected_entityId,
+                selected_entityId: state.selected_entityId,
                 selected_idp: getSelectedIdp(action.idps, state.selected_entityId)
             })
         case PREVIOUS_PAGE_IDPS:
@@ -104,6 +131,31 @@ function getSelectedIdp(list, entityId) {
     //console.log('Selected idp for entityid='+entityId+' is:');
     //console.log(selected_idp);
     return selected_idp
+}
+
+/**
+ * Process the list of idps and generate a set of countries
+ * @param list
+ */
+function getCountries(list) {
+    var countries = [];
+    list.forEach(function(idp) {
+        var current = idp.country;
+
+        //Check the current list to see if the current country is already in the list
+        var exists = false;
+        for (var i = 0; i < countries.length && !exists; i++) {
+            if (current === countries[i]) {
+                exists = true;
+            }
+        }
+
+        //Add current country to list if it doesn't exist in the list
+        if (!exists) {
+            countries.push(current)
+        }
+    });
+    return countries;
 }
 
 /**
