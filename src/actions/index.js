@@ -8,6 +8,7 @@ export const SEARCH_IDPS = 'SEARCH_IDPS'
 export const CLICKED_IDP = 'CLICKED_IDP'
 export const SELECTED_IDP = 'SELECTED_IDP'
 export const SET_QUERY_PARAMETERS = 'SET_QUERY_PARAMETERS'
+export const SET_COUNTRY_FILTER = 'SET_COUNTRY_FILTER'
 
 /**
  * Request download if IDP json data
@@ -111,5 +112,12 @@ export function createQueryParametersAction(sp_entity_id, sp_return) {
         type: SET_QUERY_PARAMETERS,
         sp_entity_id: sp_entity_id,
         sp_return: sp_return
+    }
+}
+
+export function setCountryFilter(country) {
+    return {
+        type: SET_COUNTRY_FILTER,
+        country: country,
     }
 }

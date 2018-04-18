@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import IdpList from '../pages/IdpList'
-import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp, idpClick, selectIdp } from '../actions'
+import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp, idpClick, selectIdp, setCountryFilter } from '../actions'
 
 const getVisibleIdps = (idps, filter) => {
     switch (filter) {
@@ -35,6 +35,9 @@ const mapDispatchToProps = dispatch => {
         },
         patternChange: (pattern) => {
             dispatch(searchIdp(pattern))
+        },
+        countryChange: (country) => {
+        dispatch(setCountryFilter(country))
         },
         firstPageClick: () => {
             dispatch(firstPageIdps())

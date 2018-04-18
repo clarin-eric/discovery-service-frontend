@@ -8,7 +8,7 @@ import {
     FIRST_PAGE_IDPS,
     LAST_PAGE_IDPS,
     CLICKED_IDP,
-    SELECTED_IDP, SET_QUERY_PARAMETERS,
+    SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER,
 } from '../actions'
 
 /**
@@ -110,6 +110,11 @@ const idp_list = (state = {countries: [], isFetching: false, index: 0, show: 10,
                 sp_entity_id: action.sp_entity_id,
                 sp_return: action.sp_return
             })
+        case SET_COUNTRY_FILTER:
+            console.log("Set country filter: "+action.country);
+            return Object.assign({}, state, {
+                filtered: filterByCountry(action.country, state.items)
+            })
         default:
             return state
     }
@@ -183,6 +188,22 @@ function filter(pattern, list) {
         filtered = custom_filtered;
         console.log("Filtered list:");
         console.log(filtered);
+    }
+    return filtered;
+}
+
+/**
+ * Filter the list of idp entries according to the supplied country
+ * @param pattern
+ * @param list
+ * @returns {*}
+ */
+function filterByCountry(country, list) {
+    var filtered = [];
+    for(var i = 0; i < list.length; i++) {
+        if (list[i].country === country) {
+            filtered.push(list[i]);
+        }
     }
     return filtered;
 }

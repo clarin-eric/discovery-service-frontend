@@ -26,5 +26,4 @@ Home.propTypes = {
     setQueryParameters: PropTypes.func.isRequired,
 };
 
-
 export default Home;

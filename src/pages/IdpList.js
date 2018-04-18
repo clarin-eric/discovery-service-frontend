@@ -23,6 +23,7 @@ class IdpList extends Component {
         const { isFetching } = this.props;
         let idps = this.props.idps.items;
         let selected_idp = this.props.idps.selected_idp;
+        let country_list = this.props.idps.countries;
 
         //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
@@ -40,6 +41,7 @@ class IdpList extends Component {
             </Row>);
         }
 
+        //Generate IDP list
         let rows = null;
         if(isFetching) {
             rows = (
@@ -59,11 +61,15 @@ class IdpList extends Component {
             ));
         }
 
+        //Generate country filter options
         let countries = null;
-        countries = this.props.idps.countries.map(country => (
-            <option value={country} key={country}>{country}</option>
-        ));
+        if(country_list) {
+            countries = country_list.map(country => (
+                <option value={country} key={country}>{country}</option>
+            ));
+        }
 
+        //Return UI
         return (
             <div className="idpList">
                 {selected}
@@ -79,8 +85,7 @@ class IdpList extends Component {
                         </InputGroup>
                     </Col>
                     <Col lg={2}>
-                        <FormControl componentClass="select" placeholder="filter">
-                        <option value="filter">Filter by country</option>
+                        <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
                             {countries}
                         </FormControl>
                     </Col>
@@ -137,6 +142,7 @@ IdpList.propTypes = {
     firstPageClick: PropTypes.func.isRequired,
     lastPageClick: PropTypes.func.isRequired,
     patternChange: PropTypes.func.isRequired,
+    countryChange: PropTypes.func.isRequired,
     idpClick: PropTypes.func.isRequired,
     setSelectedIdp: PropTypes.func.isRequired,
 };
