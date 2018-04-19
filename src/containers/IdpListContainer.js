@@ -15,6 +15,7 @@ const getVisibleIdps = (idps, filter) => {
                 selected_entityId: idps.selected_entityId,
                 selected_idp: idps.selected_idp,
                 countries: idps.countries,
+                errors: idps.errors,
             }
     }
 }

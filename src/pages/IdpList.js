@@ -24,6 +24,7 @@ class IdpList extends Component {
         let idps = this.props.idps.items;
         let selected_idp = this.props.idps.selected_idp;
         let country_list = this.props.idps.countries;
+        let error_list = this.props.idps.errors;
 
         //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
@@ -65,13 +66,31 @@ class IdpList extends Component {
         let countries = null;
         if(country_list) {
             countries = country_list.map(country => (
-                <option value={country} key={country}>{country}</option>
+                <option value={country.code} key={country.code}>{country.label}</option>
+            ));
+        }
+
+        //Warning: It appears as if you visited this page directly, this will not work. Please login via the
+        //service you are trying to access.
+        let error = [];
+        if (error_list.length > 0) {
+            error_list.map(err => (
+                error.push(
+                    <p key={err.code} className="small error">{err.message}</p>)
             ));
         }
 
         //Return UI
         return (
             <div className="idpList">
+                <Row>
+                    <Col lg={6} lgOffset={3}>
+                        <h3>Sign in via the CLARIN Service Provider Federation</h3>
+                        <p className="small">Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.</p>
+                        <p className="small">If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an account here. For questions please contact spf@clarin.eu.</p>
+                        {error}
+                    </Col>
+                </Row>
                 {selected}
                 <Row>
                     <Col lg={4} lgOffset={3}>
@@ -86,6 +105,7 @@ class IdpList extends Component {
                     </Col>
                     <Col lg={2}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
+                            <option value="*" key="all">All</option>
                             {countries}
                         </FormControl>
                     </Col>
@@ -136,6 +156,7 @@ IdpList.propTypes = {
         selected_entityId: PropTypes.string,
         selected_idp: PropTypes.shape({}),
         countries: PropTypes.array.isRequired,
+        errors: PropTypes.array.isRequired,
     }).isRequired,
     previousPageClick: PropTypes.func.isRequired,
     nextPageClick: PropTypes.func.isRequired,

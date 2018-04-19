@@ -44,3 +44,11 @@
   font-size: 0.85em;
 }
 
+.small {
+  em: 0.9;
+  text-align: justify;
+}
+
+.error {
+  color: #ff0000;
+}
