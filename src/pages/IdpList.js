@@ -70,14 +70,19 @@ class IdpList extends Component {
             ));
         }
 
-        //Warning: It appears as if you visited this page directly, this will not work. Please login via the
-        //service you are trying to access.
+        //Manage errors
         let error = [];
-        if (error_list.length > 0) {
-            error_list.map(err => (
+        for(var i = 0; i < error_list.length; i++) {
+            var err = error_list[i];
+            if (err.code === "ERROR_NO_RETURN_URL") {
                 error.push(
-                    <p key={err.code} className="small error">{err.message}</p>)
-            ));
+                    <p key={err.code} className="small error">
+                        Warning: It appears as if you visited this page directly, this will not work. Please login
+                        <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
+                        are trying to access.
+                    </p>)
+            }
+            console.log("Error: " + err.code + ", message=" + err.message);
         }
 
         //Return UI
