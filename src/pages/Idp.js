@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Image} from 'react-bootstrap';
 
 class Idp extends Component {
 
@@ -268,18 +268,33 @@ class Idp extends Component {
 
         var logo = null;
         if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
-            logo = (<img className="logo" src={this.props.icon.url} alt="logo"></img>)
+            logo =  <Image src={this.props.icon.url} className="logo" alt="Logo"/>
+        }
+
+
+        var classname = "idp";
+        var logo_container_classname = "ogo-container";
+        if (this.props.layout === 2) {
+            //wide layout
+            classname += " idp-wide";
+            logo_container_classname += " logo-container-wide";
+        } else {
+            //box layout
+            classname += " idp-box";
+            logo_container_classname += " logo-container-box";
         }
 
         return (
-            <Row className="idp">
-                <Col lg={8}>
+            <Row className={classname}>
+
+                <Col xs={8}>
                     <div className="idp-title">{this.props.name}</div>
                     <div className="idp-country"><img src={"/images/flags/"+img} alt={"Flag "+this.props.country}></img>{country_label}</div>
                 </Col>
-                <Col lg={4}>
+                <Col xs={4} className={logo_container_classname}>
                     {logo}
                 </Col>
+
             </Row>
         );
     }
@@ -293,12 +308,14 @@ Idp.propTypes = {
         width: PropTypes.number.isRequired,
         height: PropTypes.number.isRequired,
     }),
+    layout: PropTypes.number.isRequired,
 };
 
 Idp.defaultProps = {
     name: 'Undefined identity provider',
     country: 'eu',
     logo: '',
+    layout: 1,
 };
 
 export default Idp;
