@@ -274,7 +274,7 @@ class Idp extends Component {
 
         var classname = "idp";
         var logo_container_classname = "ogo-container";
-        if (this.props.layout == 2) {
+        if (this.props.layout === 2) {
             //wide layout
             classname += " idp-wide";
             logo_container_classname += " logo-container-wide";

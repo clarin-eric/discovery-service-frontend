@@ -33,6 +33,49 @@ class IdpList extends Component {
         this.setState(state);
     }
 
+
+    createPaginationSection() {
+        return (
+            <Col xs={6} xsOffset={3}>
+                <Row>
+                    <Col xs={4}>
+                        <ButtonGroup>
+                            <Button onClick={e => {e.preventDefault(); this.props.previousPageClick()}}>
+                                <i className="fa fas fa-angle-left"></i>
+                            </Button>
+                            <Button onClick={e => {e.preventDefault(); this.props.firstPageClick()}}>
+                                <i className="fa fas fa-angle-double-left"></i>
+                            </Button>
+                        </ButtonGroup>
+                    </Col>
+                    <Col xs={4} className="stats">
+                        <span>{this.props.idps.index+1} to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total.</span>
+                    </Col>
+                    <Col xs={4}>
+                        <ButtonGroup>
+                            <Button onClick={e => {e.preventDefault(); this.props.lastPageClick()}}>
+                                <i className="fa fas fa-angle-double-right"></i>
+                            </Button>
+                            <Button onClick={e => {e.preventDefault(); this.props.nextPageClick()}}>
+                                <i className="fa fas fa-angle-right"></i>
+                            </Button>
+                        </ButtonGroup>
+                    </Col>
+                </Row>
+            </Col>
+        )
+    }
+
+    createShowMoreSection() {
+        return (
+            <Col xs={6} xsOffset={3}>
+                <Button onClick={e => {e.preventDefault(); this.props.showMoreClick()}}>
+                    <span>Showing {this.props.idps.index+1} to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total - click to show more</span>
+                </Button>
+            </Col>
+        )
+    }
+
     render() {
         var i = 0;
         const { isFetching } = this.props;
@@ -52,7 +95,7 @@ class IdpList extends Component {
                         name={selected_idp.titles[0].value}
                         country={selected_idp.country}
                         icon={selected_idp.icon}
-                        layout={2}
+                        layout={layout}
                     />
                 </Col>
             </Row>);
@@ -155,33 +198,7 @@ class IdpList extends Component {
                 </Row>
                 <Grid className="grid-margin">{rows}</Grid>
                 <Row>
-                    <Col xs={6} xsOffset={3}>
-                        <Row>
-                            <Col xs={4}>
-                                <ButtonGroup>
-                                    <Button onClick={e => {e.preventDefault(); this.props.previousPageClick()}}>
-                                        <i className="fa fas fa-angle-left"></i>
-                                    </Button>
-                                    <Button onClick={e => {e.preventDefault(); this.props.firstPageClick()}}>
-                                        <i className="fa fas fa-angle-double-left"></i>
-                                    </Button>
-                                </ButtonGroup>
-                            </Col>
-                            <Col xs={4} className="stats">
-                                <span>{this.props.idps.index+1} to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total.</span>
-                            </Col>
-                            <Col xs={4}>
-                                <ButtonGroup>
-                                    <Button onClick={e => {e.preventDefault(); this.props.lastPageClick()}}>
-                                        <i className="fa fas fa-angle-double-right"></i>
-                                    </Button>
-                                    <Button onClick={e => {e.preventDefault(); this.props.nextPageClick()}}>
-                                        <i className="fa fas fa-angle-right"></i>
-                                    </Button>
-                                </ButtonGroup>
-                            </Col>
-                        </Row>
-                    </Col>
+                    {this.createShowMoreSection()}
                 </Row>
             </div>
         );
@@ -205,6 +222,7 @@ IdpList.propTypes = {
     nextPageClick: PropTypes.func.isRequired,
     firstPageClick: PropTypes.func.isRequired,
     lastPageClick: PropTypes.func.isRequired,
+    showMoreClick: PropTypes.func.isRequired,
     patternChange: PropTypes.func.isRequired,
     countryChange: PropTypes.func.isRequired,
     idpClick: PropTypes.func.isRequired,
