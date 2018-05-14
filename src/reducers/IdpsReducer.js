@@ -194,7 +194,8 @@ function filter(pattern, list) {
             var added = false;
             for(var j = 0; j < idp.titles.length && !added; j++) {
                 var title = idp.titles[j].value;
-                var result = title.match(pattern, "i");
+                //var result = title.match(pattern, "i");
+                var result = title.match(new RegExp(pattern, "i"));
                 if(result) {
                     custom_filtered.push(idp)
                     added = true;
@@ -218,7 +219,7 @@ function filterByCountry(country, list) {
         filtered = list;
     } else {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].country.code === country) {
+            if (list[i].country === country) {
                 filtered.push(list[i]);
             }
         }
@@ -234,13 +235,16 @@ function filterByCountry(country, list) {
  * @returns {*}
  */
 function combineFilters(pattern, country, list) {
+    console.log("Combining filters, pattern="+pattern+", country="+country+", #unfiltered entries="+list.length);
     var filtered = list;
     if (country) {
         filtered = filterByCountry(country, filtered)
     }
+    console.log("filtered by country: "+filtered.length);
     if(pattern) {
         filtered = filter(pattern, filtered)
     }
+    console.log("filtered by pattern: "+filtered.length);
     return filtered
 }
 
