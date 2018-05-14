@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
-import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon} from 'react-bootstrap';
+import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -33,6 +33,52 @@ class IdpList extends Component {
         this.setState(state);
     }
 
+    createFilterSection() {
+        const country_list = this.props.idps.countries;
+        //Generate country filter options
+        let countries = null;
+        if(country_list) {
+            countries = country_list.map(country => (
+                <option value={country.code} key={country.code}>{country.label}</option>
+            ));
+        }
+
+        const tooltipSearchPattern = (<Tooltip id="tooltip">Search for a specific identity provider</Tooltip>)
+        const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
+        const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
+        return (
+            <Row>
+                <Col md={4} mdOffset={3} sm={6} smOffset={0}>
+                    <InputGroup>
+                        <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
+                        <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern}>
+                            <FormControl
+                                type="text"
+                                defaultValue=""
+                                placeholder="Search for your home organization..."
+                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}} />
+                        </OverlayTrigger>
+                    </InputGroup>
+                </Col>
+                <Col md={2} sm={4}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry}>
+                        <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
+                            <option value="*" key="all">All</option>
+                            {countries}
+                        </FormControl>
+                    </OverlayTrigger>
+                </Col>
+                <Col sm={2}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
+                    <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
+                        <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
+                        <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
+                    </ToggleButtonGroup>
+                    </OverlayTrigger>
+                </Col>
+            </Row>
+        )
+    }
 
     createPaginationSection() {
         return (
@@ -68,10 +114,10 @@ class IdpList extends Component {
 
     createShowMoreSection() {
         return (
-            <Col xs={6} xsOffset={3}>
-                <Button onClick={e => {e.preventDefault(); this.props.showMoreClick()}}>
-                    <span>Showing {this.props.idps.index+1} to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total - click to show more</span>
-                </Button>
+            <Col xs={6} xsOffset={3} onClick={e => {e.preventDefault(); this.props.showMoreClick()}}>
+                    <a href="#" >
+                        Results limited to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total - show more...
+                    </a>
             </Col>
         )
     }
@@ -81,7 +127,7 @@ class IdpList extends Component {
         const { isFetching } = this.props;
         let idps = this.props.idps.items;
         let selected_idp = this.props.idps.selected_idp;
-        let country_list = this.props.idps.countries;
+
         let error_list = this.props.idps.errors;
         const layout = this.state.layout;
 
@@ -134,14 +180,6 @@ class IdpList extends Component {
             }
         }
 
-        //Generate country filter options
-        let countries = null;
-        if(country_list) {
-            countries = country_list.map(country => (
-                <option value={country.code} key={country.code}>{country.label}</option>
-            ));
-        }
-
         //Manage errors
         let error = [];
         for(i = 0; i < error_list.length; i++) {
@@ -172,30 +210,7 @@ class IdpList extends Component {
                     </Col>
                 </Row>
                 <Grid>{selected}</Grid>
-                <Row>
-                    <Col md={4} mdOffset={3} sm={6} smOffset={0}>
-                        <InputGroup>
-                            <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
-                            <FormControl
-                                type="text"
-                                defaultValue=""
-                                placeholder="Search for your home organization..."
-                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}} />
-                        </InputGroup>
-                    </Col>
-                    <Col md={2} sm={4}>
-                        <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
-                            <option value="*" key="all">All</option>
-                            {countries}
-                        </FormControl>
-                    </Col>
-                    <Col sm={2}>
-                    <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
-                        <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
-                        <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
-                    </ToggleButtonGroup>
-                    </Col>
-                </Row>
+                {this.createFilterSection()}
                 <Grid className="grid-margin">{rows}</Grid>
                 <Row>
                     {this.createShowMoreSection()}
