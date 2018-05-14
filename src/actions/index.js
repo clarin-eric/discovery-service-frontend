@@ -9,6 +9,8 @@ export const CLICKED_IDP = 'CLICKED_IDP'
 export const SELECTED_IDP = 'SELECTED_IDP'
 export const SET_QUERY_PARAMETERS = 'SET_QUERY_PARAMETERS'
 export const SET_COUNTRY_FILTER = 'SET_COUNTRY_FILTER'
+export const SHOW_MORE_IDPS = 'SHOW_MORE_IDPS'
+
 
 /**
  * Request download if IDP json data
@@ -31,6 +33,12 @@ export const receiveIdps = (json) => {
         type: RECEIVE_IDPS,
         idps: json.discojuice,
         receivedAt: Date.now()
+    }
+}
+
+export const showMoreIdps = () => {
+    return {
+        type: SHOW_MORE_IDPS
     }
 }
 

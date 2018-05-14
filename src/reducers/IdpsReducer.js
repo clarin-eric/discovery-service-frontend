@@ -8,7 +8,7 @@ import {
     FIRST_PAGE_IDPS,
     LAST_PAGE_IDPS,
     CLICKED_IDP,
-    SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER,
+    SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER, SHOW_MORE_IDPS,
 } from '../actions'
 
 /**
@@ -40,7 +40,7 @@ import {
  * @param action
  * @returns {*}
  */
-const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 10, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
+const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
         case REQUEST_IDPS:
@@ -65,6 +65,10 @@ const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter
             console.log("previous, new index="+new_idx);
             return Object.assign({}, state, {
                 index: new_idx
+            })
+        case SHOW_MORE_IDPS:
+            return Object.assign({}, state, {
+                show: state.show+12
             })
         case NEXT_PAGE_IDPS:
             new_idx = state.index+state.show;

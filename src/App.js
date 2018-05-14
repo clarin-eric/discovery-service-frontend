@@ -13,7 +13,7 @@ class App extends Component {
                 <div className="main">
                     <Header />
                     <div id="main">
-                        <div className="container">
+                        <div className="container-fluid">
                             <Route exact path="/" component={QueryParametersEnhancedHome}/>
                             <Route path="/about" component={About}/>
                         </div>
