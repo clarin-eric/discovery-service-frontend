@@ -1,15 +1,23 @@
 .idp {
-    border: 1px solid #000000;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px;
     padding: 5px;
     text-align: left;
-    min-height: 70px;
-    max-height: 70px;
+    min-height: 95px;
+    max-height: 95px;
+    overflow:hidden;
+    width: 100%;
+    font-size: 0.95em;
 }
 
 .idp:hover {
-    background-color: #eee;
+    /*background-color: #eee;*/
+    /*box-shadow: 4px 4px rgba(51,122,183,0.25);*/
+    outline: none;
+    border-color: #337ab7;
+    box-shadow: 0 0 10px #337ab7;
+    cursor: pointer;
 }
 
 .idp-country img {
@@ -18,15 +26,32 @@
     font-size: 0.9em;
 }
 
-.logo {
+.logo-container {
     margin: 0px;
-    float: right;
-    min-height: 40px;
-    max-height: 50px;
-    max-width: 200px;
-    margin-top: 5px;
+    height: 79px; /* 95 - 2x5 - 2x3*/
+    position: relative;
+    text-align: center;
+}
+
+.logo {
+    min-width: 25%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
 .previous-selected-idp {
     margin-bottom: 25px;
+}
+
+.grid-margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

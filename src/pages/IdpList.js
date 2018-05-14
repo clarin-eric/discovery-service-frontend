@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
-import {Row, Col, Button, ButtonGroup, InputGroup, FormControl} from 'react-bootstrap';
+import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -20,6 +20,7 @@ class IdpList extends Component {
     }
 
     render() {
+        var i = 0;
         const { isFetching } = this.props;
         let idps = this.props.idps.items;
         let selected_idp = this.props.idps.selected_idp;
@@ -31,7 +32,7 @@ class IdpList extends Component {
         if(selected_idp) {
             selected = (<Row className="previous-selected-idp"
                              onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, selected_idp.entityID)}}>
-                <Col lg={4} lgOffset={4}>
+                <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
                     <Idp
                         name={selected_idp.titles[0].value}
                         country={selected_idp.country}
@@ -47,19 +48,27 @@ class IdpList extends Component {
         if(isFetching) {
             rows = (
                 <Row>
-                    <Col lg={6} lgOffset={3}>
+                    <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
                         <span>Loading idp data...</span>)
                     </Col>
                 </Row>
             );
         } else {
+
+
             rows = idps.map(idp => (
-                <Row key={idp.entityID} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}}>
-                    <Col lg={6} lgOffset={3}>
-                        <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
-                    </Col>
-                </Row>
-            ));
+                <Col md={4}  sm={6} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
+                    <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
+                </Col>
+            ))
+
+            /*
+            rows = idps.map(idp => (
+                <Col sm={6} smOffset={3} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
+                    <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
+                </Col>
+            ))
+            */
         }
 
         //Generate country filter options
@@ -72,13 +81,13 @@ class IdpList extends Component {
 
         //Manage errors
         let error = [];
-        for(var i = 0; i < error_list.length; i++) {
+        for(i = 0; i < error_list.length; i++) {
             var err = error_list[i];
             if (err.code === "ERROR_NO_RETURN_URL") {
                 error.push(
                     <p key={err.code} className="small error">
-                        Warning: It appears as if you visited this page directly, this will not work. Please login
-                        <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
+                        Warning: It appears as if you visited this page directly, this will not work. Please
+                        login <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
                         are trying to access.
                     </p>)
             }
@@ -89,16 +98,19 @@ class IdpList extends Component {
         return (
             <div className="idpList">
                 <Row>
-                    <Col lg={6} lgOffset={3}>
+                    <Col xs={12} lgOffset={0}>
                         <h3>Sign in via the CLARIN Service Provider Federation</h3>
-                        <p className="small">Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.</p>
-                        <p className="small">If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an account here. For questions please contact spf@clarin.eu.</p>
+                        <p className="small">
+                            Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
+                            If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
+                            account <a href="https://user.clarin.eu/register">here</a>. For questions please contact <a href="mailto:spf@clarin.eu">spf@clarin.eu</a>.
+                        </p>
                         {error}
                     </Col>
                 </Row>
-                {selected}
+                <Grid>{selected}</Grid>
                 <Row>
-                    <Col lg={4} lgOffset={3}>
+                    <Col md={4} mdOffset={3} sm={8} smOffset={0}>
                         <InputGroup>
                             <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
                             <FormControl
@@ -108,18 +120,18 @@ class IdpList extends Component {
                                 onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}} />
                         </InputGroup>
                     </Col>
-                    <Col lg={2}>
+                    <Col md={2} sm={4}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
                             <option value="*" key="all">All</option>
                             {countries}
                         </FormControl>
                     </Col>
                 </Row>
-                {rows}
+                <Grid className="grid-margin">{rows}</Grid>
                 <Row>
-                    <Col lg={6} lgOffset={3}>
+                    <Col xs={6} xsOffset={3}>
                         <Row>
-                            <Col lg={4}>
+                            <Col xs={4}>
                                 <ButtonGroup>
                                     <Button onClick={e => {e.preventDefault(); this.props.previousPageClick()}}>
                                         <i className="fa fas fa-angle-left"></i>
@@ -129,10 +141,10 @@ class IdpList extends Component {
                                     </Button>
                                 </ButtonGroup>
                             </Col>
-                            <Col lg={4} className="stats">
+                            <Col xs={4} className="stats">
                                 <span>{this.props.idps.index+1} to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total.</span>
                             </Col>
-                            <Col lg={4}>
+                            <Col xs={4}>
                                 <ButtonGroup>
                                     <Button onClick={e => {e.preventDefault(); this.props.lastPageClick()}}>
                                         <i className="fa fas fa-angle-double-right"></i>

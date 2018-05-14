@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Image} from 'react-bootstrap';
 
 class Idp extends Component {
 
@@ -268,18 +268,20 @@ class Idp extends Component {
 
         var logo = null;
         if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
-            logo = (<img className="logo" src={this.props.icon.url} alt="logo"></img>)
+            logo =  <Image src={this.props.icon.url} className="logo" alt="Logo"/>
         }
 
         return (
             <Row className="idp">
-                <Col lg={8}>
+
+                <Col xs={8}>
                     <div className="idp-title">{this.props.name}</div>
                     <div className="idp-country"><img src={"/images/flags/"+img} alt={"Flag "+this.props.country}></img>{country_label}</div>
                 </Col>
-                <Col lg={4}>
+                <Col xs={4} className="logo-container">
                     {logo}
                 </Col>
+
             </Row>
         );
     }

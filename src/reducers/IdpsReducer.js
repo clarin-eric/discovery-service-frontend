@@ -40,7 +40,7 @@ import {
  * @param action
  * @returns {*}
  */
-const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 10, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
+const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
         case REQUEST_IDPS:
