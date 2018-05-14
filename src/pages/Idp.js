@@ -271,14 +271,27 @@ class Idp extends Component {
             logo =  <Image src={this.props.icon.url} className="logo" alt="Logo"/>
         }
 
+
+        var classname = "idp";
+        var logo_container_classname = "ogo-container";
+        if (this.props.layout == 2) {
+            //wide layout
+            classname += " idp-wide";
+            logo_container_classname += " logo-container-wide";
+        } else {
+            //box layout
+            classname += " idp-box";
+            logo_container_classname += " logo-container-box";
+        }
+
         return (
-            <Row className="idp">
+            <Row className={classname}>
 
                 <Col xs={8}>
                     <div className="idp-title">{this.props.name}</div>
                     <div className="idp-country"><img src={"/images/flags/"+img} alt={"Flag "+this.props.country}></img>{country_label}</div>
                 </Col>
-                <Col xs={4} className="logo-container">
+                <Col xs={4} className={logo_container_classname}>
                     {logo}
                 </Col>
 
@@ -295,12 +308,14 @@ Idp.propTypes = {
         width: PropTypes.number.isRequired,
         height: PropTypes.number.isRequired,
     }),
+    layout: PropTypes.number.isRequired,
 };
 
 Idp.defaultProps = {
     name: 'Undefined identity provider',
     country: 'eu',
     logo: '',
+    layout: 1,
 };
 
 export default Idp;

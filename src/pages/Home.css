@@ -1,14 +1,26 @@
 .idp {
     border: 1px solid #ccc;
     border-radius: 4px;
+    text-align: left;
+    overflow:hidden;
+    font-size: 0.95em;
+    width: 100%;
+}
+.idp-box {
     margin: 5px;
     padding: 5px;
     text-align: left;
     min-height: 95px;
     max-height: 95px;
     overflow:hidden;
-    width: 100%;
-    font-size: 0.95em;
+}
+
+.idp-wide {
+    margin: 2px;
+    padding: 3px;
+    text-align: left;
+    min-height: 60px;
+    max-height: 60px;
 }
 
 .idp:hover {
@@ -28,9 +40,16 @@
 
 .logo-container {
     margin: 0px;
-    height: 79px; /* 95 - 2x5 - 2x3*/
     position: relative;
     text-align: center;
+}
+
+.logo-container-box {
+    height: 79px; /* 95 - 2x5 - 2x3*/
+}
+
+.logo-container-wide {
+    height: 49px;
 }
 
 .logo {

@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
-import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl} from 'react-bootstrap';
+import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 
 class IdpList extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            layout: 1
+        }
+        this.handleLayoutChange = this.handleLayoutChange.bind(this);
+    }
 
     componentWillMount() {
         const { cookies } = this.props;
@@ -19,6 +27,12 @@ class IdpList extends Component {
         }
     }
 
+    handleLayoutChange(event) {
+        var state = this.state;
+        state.layout=event;
+        this.setState(state);
+    }
+
     render() {
         var i = 0;
         const { isFetching } = this.props;
@@ -26,6 +40,7 @@ class IdpList extends Component {
         let selected_idp = this.props.idps.selected_idp;
         let country_list = this.props.idps.countries;
         let error_list = this.props.idps.errors;
+        const layout = this.state.layout;
 
         //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
@@ -37,7 +52,7 @@ class IdpList extends Component {
                         name={selected_idp.titles[0].value}
                         country={selected_idp.country}
                         icon={selected_idp.icon}
-
+                        layout={2}
                     />
                 </Col>
             </Row>);
@@ -55,20 +70,25 @@ class IdpList extends Component {
             );
         } else {
 
+            if(layout === 2) {
+                //Generate list layout
+                rows = idps.map(idp => (
+                    <Col sm={6} smOffset={3} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
+                        <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon} layout={layout}/>
+                    </Col>
+                ))
 
-            rows = idps.map(idp => (
-                <Col md={4}  sm={6} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
-                    <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
-                </Col>
-            ))
-
-            /*
-            rows = idps.map(idp => (
-                <Col sm={6} smOffset={3} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
-                    <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon}/>
-                </Col>
-            ))
-            */
+            } else {
+                //Generate grid layout
+                rows = idps.map(idp => (
+                    <Col md={4} sm={6} xs={12} onClick={e => {
+                        e.preventDefault();
+                        this.props.idpClick(this.props.cookies, idp.entityID)
+                    }} key={idp.entityID}>
+                        <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon} layout={layout}/>
+                    </Col>
+                ))
+            }
         }
 
         //Generate country filter options
@@ -110,7 +130,7 @@ class IdpList extends Component {
                 </Row>
                 <Grid>{selected}</Grid>
                 <Row>
-                    <Col md={4} mdOffset={3} sm={8} smOffset={0}>
+                    <Col md={4} mdOffset={3} sm={6} smOffset={0}>
                         <InputGroup>
                             <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
                             <FormControl
@@ -125,6 +145,12 @@ class IdpList extends Component {
                             <option value="*" key="all">All</option>
                             {countries}
                         </FormControl>
+                    </Col>
+                    <Col sm={2}>
+                    <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
+                        <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
+                        <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
+                    </ToggleButtonGroup>
                     </Col>
                 </Row>
                 <Grid className="grid-margin">{rows}</Grid>
