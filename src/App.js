@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Header from './header/Header.js';
-import Footer from './footer/Footer.js';
+import FooterContainer from './containers/FooterContainer';
 import QueryParametersEnhancedHome from './containers/HomeContainer.js';
-import About from './pages/About.js';
+import AboutContainer from './containers/AboutContainer';
 import './App.css';
 
 class App extends Component {
@@ -15,10 +15,10 @@ class App extends Component {
                     <div id="main">
                         <div className="container-fluid">
                             <Route exact path="/" component={QueryParametersEnhancedHome}/>
-                            <Route path="/about" component={About}/>
+                            <Route path="/about" component={AboutContainer}/>
                         </div>
                     </div>
-                    <Footer />
+                    <FooterContainer />
                 </div>
             </Router>
         );

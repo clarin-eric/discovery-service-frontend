@@ -10,7 +10,7 @@ const getVisibleIdps = (idps, filter) => {
                 isFetching: idps.isFetching,
                 index: idps.index,
                 show: idps.show,
-                total: idps.items.length,
+                total: idps.filtered.length,
                 items: idps.filtered.slice(idps.index,idps.index+idps.show),
                 selected_entityId: idps.selected_entityId,
                 selected_idp: idps.selected_idp,

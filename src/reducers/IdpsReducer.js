@@ -9,6 +9,7 @@ import {
     LAST_PAGE_IDPS,
     CLICKED_IDP,
     SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER, SHOW_MORE_IDPS,
+    REQUEST_VERSION, RECEIVED_VERSION
 } from '../actions'
 
 /**
@@ -40,19 +41,41 @@ import {
  * @param action
  * @returns {*}
  */
-const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
+const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
+        case REQUEST_VERSION:
+            return Object.assign({}, state, {
+                version: {
+                    fetching: true,
+                    value: state.version.value
+                }
+             })
+        case RECEIVED_VERSION:
+            return Object.assign({}, state, {
+                version: {
+                    fetching: false,
+                    value: action.version
+                }
+            })
         case REQUEST_IDPS:
             return Object.assign({}, state, {
                 isFetching: true
             })
         case RECEIVE_IDPS:
+            //Process IDP items to resolve country_code to country_label
+            var idps = [];
+            action.idps.forEach(function(idp) {
+                var ext_idp = idp;
+                ext_idp["country_code"] = idp.country;
+                ext_idp["country_label"] = getFullCountry(idp.country);
+                idps.push(ext_idp);
+            });
             return Object.assign({}, state, {
                 countries: getCountries(action.idps),
                 isFetching: false,
                 items: action.idps,
-                filtered: action.idps,
+                filtered: idps,//action.idps,
                 lastUpdated: action.receivedAt,
                 selected_entityId: state.selected_entityId,
                 selected_idp: getSelectedIdp(action.idps, state.selected_entityId)

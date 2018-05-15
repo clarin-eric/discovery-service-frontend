@@ -24,18 +24,23 @@
 }
 
 .idp:hover {
-    /*background-color: #eee;*/
-    /*box-shadow: 4px 4px rgba(51,122,183,0.25);*/
     outline: none;
-    border-color: #337ab7;
-    box-shadow: 0 0 10px #337ab7;
+    border-color: #07426E;
+    box-shadow: 0 0 10px #07426E;
     cursor: pointer;
+}
+
+.idp-title {
+    font-size: 1.1em;
+}
+
+.idp-country {
+    font-size: 0.9em;
 }
 
 .idp-country img {
     marging-left: 5px;
     margin-right: 5px;
-    font-size: 0.9em;
 }
 
 .logo-container {

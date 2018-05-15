@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Footer.css';
 import {Row, Col} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 class Footer extends Component {
     render() {
@@ -8,7 +9,7 @@ class Footer extends Component {
             <div id="footer" className="container-fluid">
                 <Row>
                     <Col lg={3}>
-                        <a href="/about">About</a><br /><span className="footer-fineprint">0.0.1</span>
+                        <a href="/about">About</a><br /><span className="footer-fineprint">{this.props.version.value}</span>
                     </Col>
                     <Col className="footer-fineprint" lg={6}>
                         Service provided by <a href="https://www.clarin.eu">CLARIN</a>
@@ -21,5 +22,20 @@ class Footer extends Component {
         );
     }
 }
+
+Footer.propTypes = {
+    version: PropTypes.shape({
+        fetching: PropTypes.bool.isRequired,
+        value: PropTypes.string.isRequired,
+    })
+}
+
+
+Footer.defaultProps = {
+    version: {
+        fetching: false,
+        value: "n/a"
+    },
+};
 
 export default Footer;
