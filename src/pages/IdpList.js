@@ -113,10 +113,15 @@ class IdpList extends Component {
     }
 
     createShowMoreSection() {
+        const total = this.props.idps.total
+        var shown = this.props.idps.index+this.props.idps.show;
+        if (shown > total) {
+            shown = total;
+        }
         return (
             <Col xs={6} xsOffset={3} onClick={e => {e.preventDefault(); this.props.showMoreClick()}}>
                     <a href="#" >
-                        Results limited to {this.props.idps.index+this.props.idps.show} out of {this.props.idps.total} total - show more...
+                        Results limited to {shown} out of {total} total - show more...
                     </a>
             </Col>
         )

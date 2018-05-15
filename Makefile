@@ -1,6 +1,11 @@
+VERSION=0.0.1-alpha4
 
 build:
 	npm run build
 
-release: build
-	cd build && tar -pczvf discovery-service-frontend.tar.gz * && mv *.tar.gz ..
+clean:
+	rm -rf build
+
+release: clean build
+	echo "{\"version\": \"${VERSION}\"}" > build/version.json
+	cd build && tar -pczvf "../discovery-service-frontend-${VERSION}.tar.gz" *
