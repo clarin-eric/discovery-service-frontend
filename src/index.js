@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
-import { fetchIdps } from './actions';
+import { fetchIdps, fetchVersion } from './actions';
 import registerServiceWorker from './registerServiceWorker';
 import 'bootstrap3/dist/css/bootstrap.css';
 import './index.css';
@@ -20,7 +20,7 @@ let store = createStore(
 );
 
 store.dispatch(fetchIdps())
-    //.then(() => console.log(store.getState()))
+store.dispatch(fetchVersion())
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();

@@ -9,6 +9,7 @@ import {
     LAST_PAGE_IDPS,
     CLICKED_IDP,
     SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER, SHOW_MORE_IDPS,
+    REQUEST_VERSION, RECEIVED_VERSION
 } from '../actions'
 
 /**
@@ -40,9 +41,23 @@ import {
  * @param action
  * @returns {*}
  */
-const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
+const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
+        case REQUEST_VERSION:
+            return Object.assign({}, state, {
+                version: {
+                    fetching: true,
+                    value: state.version.value
+                }
+             })
+        case RECEIVED_VERSION:
+            return Object.assign({}, state, {
+                version: {
+                    fetching: false,
+                    value: action.version
+                }
+            })
         case REQUEST_IDPS:
             return Object.assign({}, state, {
                 isFetching: true
