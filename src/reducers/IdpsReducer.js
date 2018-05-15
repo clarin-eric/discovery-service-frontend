@@ -48,11 +48,19 @@ const idp_list = (state = {errors: [], countries: [], filter_pattern: "", filter
                 isFetching: true
             })
         case RECEIVE_IDPS:
+            //Process IDP items to resolve country_code to country_label
+            var idps = [];
+            action.idps.forEach(function(idp) {
+                var ext_idp = idp;
+                ext_idp["country_code"] = idp.country;
+                ext_idp["country_label"] = getFullCountry(idp.country);
+                idps.push(ext_idp);
+            });
             return Object.assign({}, state, {
                 countries: getCountries(action.idps),
                 isFetching: false,
                 items: action.idps,
-                filtered: action.idps,
+                filtered: idps,//action.idps,
                 lastUpdated: action.receivedAt,
                 selected_entityId: state.selected_entityId,
                 selected_idp: getSelectedIdp(action.idps, state.selected_entityId)

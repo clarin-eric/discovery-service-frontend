@@ -68,7 +68,7 @@ class IdpList extends Component {
                         </FormControl>
                     </OverlayTrigger>
                 </Col>
-                <Col sm={2}>
+                <Col sm={2} xsHidden>
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
@@ -122,31 +122,28 @@ class IdpList extends Component {
         )
     }
 
-    render() {
-        var i = 0;
-        const { isFetching } = this.props;
-        let idps = this.props.idps.items;
-        let selected_idp = this.props.idps.selected_idp;
-
+    createErrorsSection() {
         let error_list = this.props.idps.errors;
-        const layout = this.state.layout;
-
-        //Create an element for the selected idp, only if the selected_idp is set
-        let selected = null;
-        if(selected_idp) {
-            selected = (<Row className="previous-selected-idp"
-                             onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, selected_idp.entityID)}}>
-                <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
-                    <Idp
-                        name={selected_idp.titles[0].value}
-                        country={selected_idp.country}
-                        icon={selected_idp.icon}
-                        layout={layout}
-                    />
-                </Col>
-            </Row>);
+        let error = [];
+        for(var i = 0; i < error_list.length; i++) {
+            var err = error_list[i];
+            if (err.code === "ERROR_NO_RETURN_URL") {
+                error.push(
+                    <p key={err.code} className="text-small text-center error">
+                        Warning: It appears as if you visited this page directly, this will not work. Please
+                        login <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
+                        are trying to access.
+                    </p>)
+            }
+            console.log("Error: " + err.code + ", message=" + err.message);
         }
+        return error;
+    }
 
+    createIdpRows() {
+        const layout = this.state.layout;
+        const idps = this.props.idps.items;
+        const { isFetching } = this.props;
         //Generate IDP list
         let rows = null;
         if(isFetching) {
@@ -158,12 +155,11 @@ class IdpList extends Component {
                 </Row>
             );
         } else {
-
             if(layout === 2) {
                 //Generate list layout
                 rows = idps.map(idp => (
                     <Col sm={6} smOffset={3} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
-                        <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon} layout={layout}/>
+                        <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                     </Col>
                 ))
 
@@ -174,25 +170,33 @@ class IdpList extends Component {
                         e.preventDefault();
                         this.props.idpClick(this.props.cookies, idp.entityID)
                     }} key={idp.entityID}>
-                        <Idp name={idp.titles[0].value} country={idp.country} icon={idp.icon} layout={layout}/>
+                        <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                     </Col>
                 ))
             }
         }
+        return rows;
+    }
 
-        //Manage errors
-        let error = [];
-        for(i = 0; i < error_list.length; i++) {
-            var err = error_list[i];
-            if (err.code === "ERROR_NO_RETURN_URL") {
-                error.push(
-                    <p key={err.code} className="small error">
-                        Warning: It appears as if you visited this page directly, this will not work. Please
-                        login <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
-                        are trying to access.
-                    </p>)
-            }
-            console.log("Error: " + err.code + ", message=" + err.message);
+    render() {
+        const layout = this.state.layout;
+        let selected_idp = this.props.idps.selected_idp;
+
+        //Create an element for the selected idp, only if the selected_idp is set
+        let selected = null;
+        if(selected_idp) {
+            selected = (<Row className="previous-selected-idp"
+                             onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, selected_idp.entityID)}}>
+                <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
+                    <Idp
+                        name={selected_idp.titles[0].value}
+                        country_code={selected_idp.country_code}
+                        country_label={selected_idp.country_label}
+                        icon={selected_idp.icon}
+                        layout={layout}
+                    />
+                </Col>
+            </Row>);
         }
 
         //Return UI
@@ -201,17 +205,17 @@ class IdpList extends Component {
                 <Row>
                     <Col xs={12} lgOffset={0}>
                         <h3>Sign in via the CLARIN Service Provider Federation</h3>
-                        <p className="small">
+                        <p className="text-small">
                             Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
                             If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
                             account <a href="https://user.clarin.eu/register">here</a>. For questions please contact <a href="mailto:spf@clarin.eu">spf@clarin.eu</a>.
                         </p>
-                        {error}
+                        {this.createErrorsSection()}
                     </Col>
                 </Row>
                 <Grid>{selected}</Grid>
                 {this.createFilterSection()}
-                <Grid className="grid-margin">{rows}</Grid>
+                <Grid className="grid-margin">{this.createIdpRows()}</Grid>
                 <Row>
                     {this.createShowMoreSection()}
                 </Row>
