@@ -18,7 +18,7 @@ class Idp extends Component {
         }
 
         var classname = "idp";
-        var logo_container_classname = "ogo-container";
+        var logo_container_classname = "logo-container";
         if (this.props.layout === 2) {
             //wide layout
             classname += " idp-wide";
@@ -30,7 +30,7 @@ class Idp extends Component {
         }
 
         return (
-            <Row className={classname}>
+            <div className={classname}>
                 <Col xs={8}>
                     <div className="idp-title">{this.props.name}</div>
                     <div className="idp-country">
@@ -41,7 +41,7 @@ class Idp extends Component {
                 <Col xs={4} className={logo_container_classname}>
                     {logo}
                 </Col>
-            </Row>
+            </div>
         );
     }
 }

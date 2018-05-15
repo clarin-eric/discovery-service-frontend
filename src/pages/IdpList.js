@@ -10,9 +10,11 @@ class IdpList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            layout: 1
+            layout: 1,
         }
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
+        this.hideGrid = this.hideGrid.bind(this);
+        this.showGrid = this.showGrid.bind(this);
     }
 
     componentWillMount() {
@@ -33,6 +35,18 @@ class IdpList extends Component {
         this.setState(state);
     }
 
+    hideGrid() {
+        var state = this.state;
+        state.show_grid=false;
+        this.setState(state);
+    }
+
+    showGrid() {
+        var state = this.state;
+        state.show_grid=true;
+        this.setState(state);
+    }
+
     createFilterSection() {
         const country_list = this.props.idps.countries;
         //Generate country filter options
@@ -43,12 +57,25 @@ class IdpList extends Component {
             ));
         }
 
+        const tooltipHide = (<Tooltip id="tooltip">Click to hide the full list of identity proviers</Tooltip>)
+        var toggleHideButton = null;
+        if (this.props.idps.selected_idp) {
+            toggleHideButton = (
+                <OverlayTrigger placement="bottom" overlay={tooltipHide}>
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        this.hideGrid()
+                    }} className="pull-right">Hide</Button>
+                </OverlayTrigger>
+            );
+        }
+
         const tooltipSearchPattern = (<Tooltip id="tooltip">Search for a specific identity provider</Tooltip>)
         const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
         const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
         return (
-            <Row>
-                <Col md={4} mdOffset={3} sm={6} smOffset={0}>
+            <Col xs={12}>
+                <Col md={7} mdOffset={0} sm={6} smOffset={0}>
                     <InputGroup>
                         <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern}>
@@ -60,7 +87,7 @@ class IdpList extends Component {
                         </OverlayTrigger>
                     </InputGroup>
                 </Col>
-                <Col md={2} sm={4}>
+                <Col md={2} sm={3}>
                     <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
                             <option value="*" key="all">All</option>
@@ -68,7 +95,7 @@ class IdpList extends Component {
                         </FormControl>
                     </OverlayTrigger>
                 </Col>
-                <Col sm={2} xsHidden>
+                <Col md={2} sm={2} xsHidden>
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
@@ -76,7 +103,10 @@ class IdpList extends Component {
                     </ToggleButtonGroup>
                     </OverlayTrigger>
                 </Col>
-            </Row>
+                <Col md={1} sm={1}>
+                    {toggleHideButton}
+                </Col>
+            </Col>
         )
     }
 
@@ -183,28 +213,68 @@ class IdpList extends Component {
         return rows;
     }
 
-    render() {
+    createGridSection() {
         const layout = this.state.layout;
-        let selected_idp = this.props.idps.selected_idp;
+        const show_grid = this.state.show_grid;
+        const selected_idp = this.props.idps.selected_idp;
 
         //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
-        if(selected_idp) {
-            selected = (<Row className="previous-selected-idp"
-                             onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, selected_idp.entityID)}}>
-                <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
-                    <Idp
-                        name={selected_idp.titles[0].value}
-                        country_code={selected_idp.country_code}
-                        country_label={selected_idp.country_label}
-                        icon={selected_idp.icon}
-                        layout={layout}
-                    />
-                </Col>
-            </Row>);
+        if (selected_idp) {
+            selected = (
+
+                    <Row className="previous-selected-idp"
+                         onClick={e => {
+                             e.preventDefault();
+                             this.props.idpClick(this.props.cookies, selected_idp.entityID)
+                         }}>
+                        <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
+                            <Idp
+                                name={selected_idp.titles[0].value}
+                                country_code={selected_idp.country_code}
+                                country_label={selected_idp.country_label}
+                                icon={selected_idp.icon}
+                                layout={layout}
+                            />
+                        </Col>
+                    </Row>
+
+            );
+        }
+        const tooltipShow = (<Tooltip id="tooltip">Click to show the full list of identity proviers</Tooltip>)
+
+
+        var btnShow = null;
+        if ((this.state.show_grid !== undefined && !this.state.show_grid) || (this.state.show_grid === undefined && selected_idp)) {
+            btnShow = (
+                <OverlayTrigger placement="bottom" overlay={tooltipShow}>
+                    <Button onClick={e => {e.preventDefault(); this.showGrid()}}>Show all identity providers</Button>
+                </OverlayTrigger>
+            );
         }
 
-        //Return UI
+        let grid = null;
+        if(!selected_idp || show_grid) {
+            grid = (
+                <Row>
+                    {this.createFilterSection()}
+                    {this.createIdpRows()}
+                    {this.createShowMoreSection()}
+                </Row>
+            );
+        }
+
+
+        return (
+            <Row>
+                {selected}
+                <Col xs={12}>{btnShow}</Col>
+                {grid}
+            </Row>
+        )
+    }
+
+    render() {
         return (
             <div className="idpList">
                 <Row>
@@ -218,12 +288,7 @@ class IdpList extends Component {
                         {this.createErrorsSection()}
                     </Col>
                 </Row>
-                <Grid>{selected}</Grid>
-                {this.createFilterSection()}
-                <Grid className="grid-margin">{this.createIdpRows()}</Grid>
-                <Row>
-                    {this.createShowMoreSection()}
-                </Row>
+                {this.createGridSection()}
             </div>
         );
     }
