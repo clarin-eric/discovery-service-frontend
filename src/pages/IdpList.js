@@ -27,8 +27,8 @@ class IdpList extends Component {
         if ( keydown.event ) {
             if (keydown.event.which === 13) {
                 const selected_idp = this.props.idps.selected_idp;
-                console.log("Enter pressed, redirecting to:"+selected_idp.entityID);
                 if (selected_idp) {
+                    console.log("Enter pressed, redirecting to:"+selected_idp.entityID);
                     this.props.idpClick(this.props.cookies, selected_idp.entityID);
                 }
             }
