@@ -139,13 +139,15 @@ class IdpList extends Component {
         if (shown > total) {
             shown = total;
         }
-        return (
-            <Col xs={6} xsOffset={3} onClick={e => {e.preventDefault(); this.props.showMoreClick()}}>
-                    <a href="#" >
-                        Results limited to {shown} out of {total} total - show more...
-                    </a>
-            </Col>
-        )
+        let btn = null;
+        if (shown < total) {
+            btn = (
+                <Button onClick={e => {e.preventDefault(); this.props.showMoreClick()}}  bsStyle="primary">
+                    Results limited to {shown} out of {total} total - show more...
+                </Button>
+            );
+        }
+        return (<Col xs={6} xsOffset={3}>{btn}</Col>)
     }
 
     createErrorsSection() {
