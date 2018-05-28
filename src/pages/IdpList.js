@@ -294,7 +294,6 @@ class IdpList extends Component {
             <div className="idpList">
                 <Row>
                     <Col xs={12} lgOffset={0}>
-                        <h3>Sign in via the CLARIN Service Provider Federation</h3>
                         <p className="text-small">
                             Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
                             If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
