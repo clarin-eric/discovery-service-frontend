@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
-import {Grid, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -9,8 +9,13 @@ class IdpList extends Component {
 
     constructor(props) {
         super(props);
+        /*
+        layout:
+            1 = grid view
+            2 = list view
+         */
         this.state = {
-            layout: 1,
+            layout: 2,
         }
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
         this.hideGrid = this.hideGrid.bind(this);
@@ -56,20 +61,8 @@ class IdpList extends Component {
                 <option value={country.code} key={country.code}>{country.label}</option>
             ));
         }
-
-        const tooltipHide = (<Tooltip id="tooltip">Click to hide the full list of identity proviers</Tooltip>)
-        var toggleHideButton = null;
-        if (this.props.idps.selected_idp) {
-            toggleHideButton = (
-                <OverlayTrigger placement="bottom" overlay={tooltipHide}>
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        this.hideGrid()
-                    }} className="pull-right">Hide</Button>
-                </OverlayTrigger>
-            );
-        }
-
+        const country_label = "";
+        //const country_label = "Countries:"
         const tooltipSearchPattern = (<Tooltip id="tooltip">Search for a specific identity provider</Tooltip>)
         const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
         const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
@@ -87,24 +80,22 @@ class IdpList extends Component {
                         </OverlayTrigger>
                     </InputGroup>
                 </Col>
-                <Col md={2} sm={3}>
+                <Col md={3} sm={4}>
+                    {country_label}
                     <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
-                            <option value="*" key="all">All</option>
+                            <option value="*" key="all">All countries</option>
                             {countries}
                         </FormControl>
                     </OverlayTrigger>
                 </Col>
-                <Col md={2} sm={2} xsHidden>
+                <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden>
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
                         <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
                     </ToggleButtonGroup>
                     </OverlayTrigger>
-                </Col>
-                <Col md={1} sm={1}>
-                    {toggleHideButton}
                 </Col>
             </Col>
         )
@@ -175,60 +166,89 @@ class IdpList extends Component {
         return error;
     }
 
-    createIdpRows() {
+    createIdpRows(s) {
         const layout = this.state.layout;
         const idps = this.props.idps.items;
         const { isFetching } = this.props;
+
         //Generate IDP list
         let rows = null;
         if(isFetching) {
             rows = (
-                <Row>
-                    <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
-                        <span>Loading idp data...</span>)
-                    </Col>
-                </Row>
+                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size}>
+                    <span>Loading idp data...</span>)
+                </Col>
             );
         } else {
-            if(layout === 2) {
-                //Generate list layout
-                rows = idps.map(idp => (
-                    <Col sm={6} smOffset={3} xs={12} onClick={e => {e.preventDefault(); this.props.idpClick(this.props.cookies, idp.entityID)}} key={idp.entityID}>
-                        <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
-                    </Col>
-                ))
-
-            } else {
-                //Generate grid layout
-                rows = idps.map(idp => (
-                    <Col md={4} sm={6} xs={12} onClick={e => {
-                        e.preventDefault();
-                        this.props.idpClick(this.props.cookies, idp.entityID)
-                    }} key={idp.entityID}>
-                        <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
-                    </Col>
-                ))
-            }
+            //Generate grid layout
+            rows = idps.map(idp => (
+                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size} onClick={e => {
+                    e.preventDefault();
+                    this.props.idpClick(this.props.cookies, idp.entityID)
+                }} key={idp.entityID}>
+                    <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
+                </Col>
+            ))
         }
-        return rows;
+        return (<Col xs={12} className="idp-grid">{rows}</Col>);
     }
 
     createGridSection() {
         const layout = this.state.layout;
-        const show_grid = this.state.show_grid;
         const selected_idp = this.props.idps.selected_idp;
+
+        let expanded = false;
+        if (!selected_idp || this.state.show_grid) {
+            expanded = true;
+        }
+
+        //Adjust main layout based on grid or column settings
+        let main_colums = {
+            lg: {size: 12, offset: 0}
+        }
+        if (layout === 2) {
+            main_colums.lg.size = 8;
+            main_colums.lg.offset = 2;
+        }
+        let s = {
+            md: {size: 4, offset: 0},
+            sm: {size: 6, offset: 0},
+            xs: {size: 12, offset: 0},
+        }
+        if (layout === 2) {
+            s.md.size = 10;
+            s.md.offset = 1;
+            s.sm.size = 12;
+            s.sm.offset = 0;
+            s.xs.size = 12;
+            s.xs.offset = 0;
+        }
+
+        let s_selected = {
+            md: {size: 6, offset: 3},
+            sm: {size: 8, offset: 2},
+            xs: {size: 12, offset: 0},
+        }
+
+        if (layout=== 2) {
+            s_selected = {
+                md: {size: 10, offset: 1},
+                sm: {size: 10, offset: 1},
+                xs: {size: 12, offset: 0},
+            }
+        }
 
         //Create an element for the selected idp, only if the selected_idp is set
         let selected = null;
         if (selected_idp) {
             selected = (
-
-                    <Row className="previous-selected-idp"
-                         onClick={e => {
-                             e.preventDefault();
-                             this.props.idpClick(this.props.cookies, selected_idp.entityID)
-                         }}>
-                        <Col md={4} mdOffset={4} sm={6} smOffset={3} xs={12}>
+                <Panel>
+                    <Panel.Heading><Panel.Title>Previously chosen home organization:</Panel.Title></Panel.Heading>
+                    <Panel.Body >
+                        <Col md={s_selected.md.size} mdOffset={s_selected.md.offset} sm={s_selected.sm.size} smOffset={s_selected.sm.offset} xs={s_selected.xs.size} onClick={e => {
+                            e.preventDefault();
+                            this.props.idpClick(this.props.cookies, selected_idp.entityID)
+                        }}>
                             <Idp
                                 name={selected_idp.titles[0].value}
                                 country_code={selected_idp.country_code}
@@ -237,41 +257,34 @@ class IdpList extends Component {
                                 layout={layout}
                             />
                         </Col>
-                    </Row>
 
+                        </Panel.Body>
+                </Panel>
             );
         }
-        const tooltipShow = (<Tooltip id="tooltip">Click to show the full list of identity proviers</Tooltip>)
-
-
-        var btnShow = null;
-        if ((this.state.show_grid !== undefined && !this.state.show_grid) || (this.state.show_grid === undefined && selected_idp)) {
-            btnShow = (
-                <OverlayTrigger placement="bottom" overlay={tooltipShow}>
-                    <Button onClick={e => {e.preventDefault(); this.showGrid()}}>Show all identity providers</Button>
-                </OverlayTrigger>
-            );
-        }
-
-        let grid = null;
-        if(!selected_idp || show_grid) {
-            grid = (
-                <Row>
-                    {this.createFilterSection()}
-                    {this.createIdpRows()}
-                    {this.createShowMoreSection()}
-                </Row>
-            );
-        }
-
 
         return (
             <Row>
-                {selected}
-                <Col xs={12}>{btnShow}</Col>
-                {grid}
+                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
+                    {selected}
+                </Col>
+                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
+                    <Panel id="collapsible-panel-example-2" defaultExpanded={expanded}>
+                        <Panel.Heading>
+                            <Panel.Title toggle>Home organization list:</Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Collapse>
+                            <Panel.Body>
+                                {this.createFilterSection()}
+                                {this.createIdpRows(s)}
+                                {this.createShowMoreSection()}
+                            </Panel.Body>
+                        </Panel.Collapse>
+                    </Panel>
+                </Col>
             </Row>
         )
+
     }
 
     render() {
