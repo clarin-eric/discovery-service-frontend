@@ -251,7 +251,7 @@ class IdpList extends Component {
         if (selected_idp) {
             selected = (
                 <Panel>
-                    <Panel.Heading><Panel.Title>Previously chosen home organization:</Panel.Title></Panel.Heading>
+                    <Panel.Heading><Panel.Title>Previously chosen home organization</Panel.Title></Panel.Heading>
                     <Panel.Body >
                         <Col md={s_selected.md.size} mdOffset={s_selected.md.offset} sm={s_selected.sm.size} smOffset={s_selected.sm.offset} xs={s_selected.xs.size} onClick={e => {
                             e.preventDefault();
@@ -279,7 +279,7 @@ class IdpList extends Component {
                 <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
                     <Panel id="collapsible-panel-example-2" defaultExpanded={expanded}>
                         <Panel.Heading>
-                            <Panel.Title toggle>Home organization list:</Panel.Title>
+                            <Panel.Title toggle>Home organization list</Panel.Title>
                         </Panel.Heading>
                         <Panel.Collapse>
                             <Panel.Body>
