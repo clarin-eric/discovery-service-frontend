@@ -12,6 +12,8 @@ import {
     REQUEST_VERSION, RECEIVED_VERSION
 } from '../actions'
 
+const filter_pattern_character_treshhold = 1;
+
 /**
  * state object:
  *  {
@@ -213,8 +215,9 @@ function getCountries(list) {
  * @returns {*}
  */
 function filter(pattern, list) {
+
     var filtered = list;
-    if(pattern.length > 2) {
+    if(pattern.length > filter_pattern_character_treshhold) {
         var custom_filtered = []
         for(var i = 0; i < list.length; i++) {
             var idp = list[i];
