@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
+import keydown from 'react-keydown';
 
 class IdpList extends Component {
 
@@ -20,6 +21,18 @@ class IdpList extends Component {
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
         this.hideGrid = this.hideGrid.bind(this);
         this.showGrid = this.showGrid.bind(this);
+    }
+
+    componentWillReceiveProps( { keydown } ) {
+        if ( keydown.event ) {
+            if (keydown.event.which === 13) {
+                const selected_idp = this.props.idps.selected_idp;
+                console.log("Enter pressed, redirecting to:"+selected_idp.entityID);
+                if (selected_idp) {
+                    this.props.idpClick(this.props.cookies, selected_idp.entityID);
+                }
+            }
+        }
     }
 
     componentWillMount() {
@@ -163,7 +176,7 @@ class IdpList extends Component {
                         are trying to access.
                     </p>)
             }
-            console.log("Error: " + err.code + ", message=" + err.message);
+//            console.log("Error: " + err.code + ", message=" + err.message);
         }
         return error;
     }
@@ -195,8 +208,7 @@ class IdpList extends Component {
         return (<Col xs={12} className="idp-grid">{rows}</Col>);
     }
 
-    createGridSection() {
-        const layout = this.state.layout;
+    createGridSection(layout, main_colums) {
         const selected_idp = this.props.idps.selected_idp;
 
         let expanded = false;
@@ -205,13 +217,7 @@ class IdpList extends Component {
         }
 
         //Adjust main layout based on grid or column settings
-        let main_colums = {
-            lg: {size: 12, offset: 0}
-        }
-        if (layout === 2) {
-            main_colums.lg.size = 8;
-            main_colums.lg.offset = 2;
-        }
+
         let s = {
             md: {size: 4, offset: 0},
             sm: {size: 6, offset: 0},
@@ -290,10 +296,19 @@ class IdpList extends Component {
     }
 
     render() {
+        const layout = this.state.layout;
+        let main_colums = {
+            lg: {size: 12, offset: 0}
+        }
+        if (layout === 2) {
+            main_colums.lg.size = 8;
+            main_colums.lg.offset = 2;
+        }
+
         return (
             <div className="idpList">
                 <Row>
-                    <Col xs={12} lgOffset={0}>
+                    <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
                         <p className="text-small">
                             Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
                             If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
@@ -302,7 +317,7 @@ class IdpList extends Component {
                         {this.createErrorsSection()}
                     </Col>
                 </Row>
-                {this.createGridSection()}
+                {this.createGridSection(layout, main_colums)}
             </div>
         );
     }
@@ -336,4 +351,4 @@ IdpList.defaultProps = {
     idps:[],
 };
 
-export default withCookies(IdpList);
+export default withCookies(keydown( 'enter' )(IdpList));

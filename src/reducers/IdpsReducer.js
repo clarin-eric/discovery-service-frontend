@@ -85,7 +85,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 if (x_title && y_title) {
                     return y.weight - x.weight || x_title.localeCompare(y_title);
                 }
-                console.log("Missing title. x title:"+x_title+", y title:"+y_title);
+                console.log("Missing title. x: {entityid:"+x.entityID+", title:"+x_title+"}, y: {entityid:"+y.entityID+", title:"+y_title+"}");
                 return 0;
             });
 
