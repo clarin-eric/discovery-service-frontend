@@ -65,14 +65,33 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 isFetching: true
             })
         case RECEIVE_IDPS:
-            //Process IDP items to resolve country_code to country_label
+            //Process IDP items to sanatize titles and resolve country_code to country_label
             var idps = [];
             action.idps.forEach(function(idp) {
                 var ext_idp = idp;
+                for(var i = 0; i < ext_idp.titles.length; i++) {
+                    ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
+                }
                 ext_idp["country_code"] = idp.country;
                 ext_idp["country_label"] = getFullCountry(idp.country);
                 idps.push(ext_idp);
             });
+
+            //Sort idp list
+            idps.sort(function(x, y) {
+                //Sort on weight first, then on title (en) alphabetically
+                const x_title = getTitle(x, 'en');
+                const y_title = getTitle(y, 'en');
+                if (x_title && y_title) {
+                    return y.weight - x.weight || x_title.localeCompare(y_title);
+                }
+            });
+
+            /*
+            idps.forEach(function(idp) {
+                console.log(getTitle(idp, 'en'));
+            });
+            */
             return Object.assign({}, state, {
                 countries: getCountries(action.idps),
                 isFetching: false,
@@ -160,6 +179,15 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
         default:
             return state
     }
+}
+
+function getTitle(idp, lang) {
+    for (var i = 0; i < idp.titles.length; i++) {
+        if(idp.titles[i].language === lang) {
+            return idp.titles[i].value;
+        }
+    }
+    return null;
 }
 
 /**
