@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Row, Col, Image} from 'react-bootstrap';
+import {Col, Image} from 'react-bootstrap';
 
 class Idp extends Component {
 
