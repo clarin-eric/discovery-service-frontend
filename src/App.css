@@ -31,3 +31,7 @@
 .error {
   color: #ff0000;
 }
+
+.panel-title {
+  text-align: left;
+}
