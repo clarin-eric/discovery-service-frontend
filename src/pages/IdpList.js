@@ -10,17 +10,24 @@ class IdpList extends Component {
 
     constructor(props) {
         super(props);
+
+        let layout = 2;
+        if (this.props.cookies.get("layout")) {
+            layout = parseInt(this.props.cookies.get("layout"), 10);
+        }
+
         /*
         layout:
             1 = grid view
             2 = list view
          */
         this.state = {
-            layout: 2,
+            layout: layout,
+            expanded: !this.props.idps.selected_idp
         }
+
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
-        this.hideGrid = this.hideGrid.bind(this);
-        this.showGrid = this.showGrid.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
     componentWillReceiveProps( { keydown } ) {
@@ -37,7 +44,6 @@ class IdpList extends Component {
 
     componentWillMount() {
         const { cookies } = this.props;
-
         //Set the selected idp entity id if a cookie with a valid value exists
         var entityId = cookies.get('entityid')
         if (entityId) {
@@ -51,17 +57,13 @@ class IdpList extends Component {
         var state = this.state;
         state.layout=event;
         this.setState(state);
+        //Remember choice
+        this.props.cookies.set("layout", state.layout);
     }
 
-    hideGrid() {
+    toggle() {
         var state = this.state;
-        state.show_grid=false;
-        this.setState(state);
-    }
-
-    showGrid() {
-        var state = this.state;
-        state.show_grid=true;
+        state.expanded=!state.expanded;
         this.setState(state);
     }
 
@@ -75,10 +77,12 @@ class IdpList extends Component {
             ));
         }
         const country_label = "";
-        //const country_label = "Countries:"
         const tooltipSearchPattern = (<Tooltip id="tooltip">Search for a specific identity provider</Tooltip>)
         const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
         const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
+
+        console.log('Layout: '+this.state.layout);
+
         return (
             <Col xs={12}>
                 <Col md={7} mdOffset={0} sm={6} smOffset={0}>
@@ -104,7 +108,7 @@ class IdpList extends Component {
                 </Col>
                 <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden>
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
-                    <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout" defaultValue={1}>
+                    <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
                         <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
                     </ToggleButtonGroup>
@@ -176,7 +180,6 @@ class IdpList extends Component {
                         are trying to access.
                     </p>)
             }
-//            console.log("Error: " + err.code + ", message=" + err.message);
         }
         return error;
     }
@@ -211,13 +214,7 @@ class IdpList extends Component {
     createGridSection(layout, main_colums) {
         const selected_idp = this.props.idps.selected_idp;
 
-        let expanded = false;
-        if (!selected_idp || this.state.show_grid) {
-            expanded = true;
-        }
-
         //Adjust main layout based on grid or column settings
-
         let s = {
             md: {size: 4, offset: 0},
             sm: {size: 6, offset: 0},
@@ -277,9 +274,20 @@ class IdpList extends Component {
                     {selected}
                 </Col>
                 <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
-                    <Panel id="collapsible-panel-example-2" defaultExpanded={expanded}>
+                    <Panel id="collapsible-panel-idplist" expanded={this.state.expanded} onToggle={e => {this.toggle()}} >
                         <Panel.Heading>
-                            <Panel.Title toggle>Home organization list</Panel.Title>
+                            <Panel.Toggle componentClass="div">
+                                <Panel.Title>
+                                    <Row>
+                                        <Col xs={11}>
+                                            Home organization list
+                                        </Col>
+                                        <Col xs={1}>
+                                            <Glyphicon glyph={this.state.expanded === true ? "glyphicon glyphicon-chevron-down" : "glyphicon glyphicon-chevron-right"} />
+                                        </Col>
+                                    </Row>
+                                </Panel.Title>
+                            </Panel.Toggle>
                         </Panel.Heading>
                         <Panel.Collapse>
                             <Panel.Body>
