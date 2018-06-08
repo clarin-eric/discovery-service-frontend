@@ -8,7 +8,7 @@ class Header extends Component {
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/"><i className="far fa-id-card fa-lg"></i>Sign in via the CLARIN Service Provider Federation</a>
+                        <a href="/"><i className="far fa-id-card fa-lg"></i><span className="title">Sign in via the CLARIN Service Provider Federation</span></a>
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav></Nav>
