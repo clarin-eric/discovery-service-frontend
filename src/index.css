@@ -3,10 +3,9 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: sans-serif;
   color: #000000;
   overflow: auto;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: "Source Sans Pro",Calibri,Arial,Helvetica,sans-serif;
   font-size: 14px;
 }
 
@@ -17,6 +16,70 @@ html, body {
   background-color: #eee;
 }
 
+.clarin-logo {
+  width: 119px;
+}
+
+#main {
+  min-height: 95%;
+  padding-top: 5em;
+  margin-top: -5em;
+  padding-bottom: 10em;
+  margin-bottom: -8em; /*leave space for header footer*/
+  background-color: #fff;
+}
+
+.title {
+  margin-left: 5px;
+}
+
+.main {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #eee;
+}
+
+.stats {
+  font-size: 0.85em;
+}
+
+.justified {
+  text-align: justify;
+}
+
+.text-small {
+  font-size: 0.95em;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.panel-title {
+  text-align: left;
+}
+
+#footer {
+       margin-top: 0em;
+       min-height: 10em;
+       max-height: 10em;
+       height: 10em;
+       padding-top: 30px;
+       border-top: 1px solid #d5d5d5;
+       background-color: #eee;
+       color: #777;
+ }
+
+.about {
+  text-align: left;
+}
+/*
 a {
   color: #0080aa;
   text-decoration: none;
@@ -51,3 +114,4 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   line-height: 1.1;
   color: #0080aa;
 }
+*/

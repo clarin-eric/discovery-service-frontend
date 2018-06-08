@@ -8,7 +8,7 @@ import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
 import { fetchIdps, fetchVersion } from './actions';
 import registerServiceWorker from './registerServiceWorker';
-import 'bootstrap3/dist/css/bootstrap.css';
+//import 'bootstrap3/dist/css/bootstrap.css';
 import './index.css';
 
 let store = createStore(

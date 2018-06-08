@@ -4,7 +4,6 @@ import Header from './header/Header.js';
 import FooterContainer from './containers/FooterContainer';
 import QueryParametersEnhancedHome from './containers/HomeContainer.js';
 import AboutContainer from './containers/AboutContainer';
-import './App.css';
 
 class App extends Component {
     render() {

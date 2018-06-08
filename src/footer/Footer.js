@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Footer.css';
 import {Row, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -11,8 +10,8 @@ class Footer extends Component {
                     <Col lg={3}>
                         <a href="/about">About</a><br /><span className="footer-fineprint">{this.props.version.value}</span>
                     </Col>
-                    <Col className="footer-fineprint" lg={6}>
-                        Service provided by <a href="https://www.clarin.eu">CLARIN</a>
+                    <Col lg={6}>
+                        <span className="footer-fineprint">Service provided by <a href="https://www.clarin.eu">CLARIN</a></span>
                     </Col>
                     <Col lg={3}>
                         <a href="mailto:spf@clarin.eu">Contact</a>
