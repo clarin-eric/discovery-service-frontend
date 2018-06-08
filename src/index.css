@@ -75,6 +75,10 @@ html, body {
        background-color: #eee;
        color: #777;
  }
+
+.about {
+  text-align: left;
+}
 /*
 a {
   color: #0080aa;
