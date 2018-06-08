@@ -12,6 +12,8 @@ import {
     REQUEST_VERSION, RECEIVED_VERSION
 } from '../actions'
 
+const filter_pattern_character_treshhold = 1;
+
 /**
  * state object:
  *  {
@@ -63,14 +65,35 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 isFetching: true
             })
         case RECEIVE_IDPS:
-            //Process IDP items to resolve country_code to country_label
+            //Process IDP items to sanatize titles and resolve country_code to country_label
             var idps = [];
             action.idps.forEach(function(idp) {
                 var ext_idp = idp;
+                for(var i = 0; i < ext_idp.titles.length; i++) {
+                    ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
+                }
                 ext_idp["country_code"] = idp.country;
                 ext_idp["country_label"] = getFullCountry(idp.country);
                 idps.push(ext_idp);
             });
+
+            //Sort idp list
+            idps.sort(function(x, y) {
+                //Sort on weight first, then on title (en) alphabetically
+                const x_title = getTitle(x, 'en');
+                const y_title = getTitle(y, 'en');
+                if (x_title && y_title) {
+                    return y.weight - x.weight || x_title.localeCompare(y_title);
+                }
+                console.log("Missing title. x: {entityid:"+x.entityID+", title:"+x_title+"}, y: {entityid:"+y.entityID+", title:"+y_title+"}");
+                return 0;
+            });
+
+            /*
+            idps.forEach(function(idp) {
+                console.log(getTitle(idp, 'en'));
+            });
+            */
             return Object.assign({}, state, {
                 countries: getCountries(action.idps),
                 isFetching: false,
@@ -160,6 +183,15 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
     }
 }
 
+function getTitle(idp, lang) {
+    for (var i = 0; i < idp.titles.length; i++) {
+        if(idp.titles[i].language === lang) {
+            return idp.titles[i].value;
+        }
+    }
+    return null;
+}
+
 /**
  * Get the idp matching the supplied entity id from the list of idps
  * @param list
@@ -213,8 +245,9 @@ function getCountries(list) {
  * @returns {*}
  */
 function filter(pattern, list) {
+
     var filtered = list;
-    if(pattern.length > 2) {
+    if(pattern.length > filter_pattern_character_treshhold) {
         var custom_filtered = []
         for(var i = 0; i < list.length; i++) {
             var idp = list[i];
