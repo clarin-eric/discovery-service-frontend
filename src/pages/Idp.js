@@ -14,7 +14,7 @@ class Idp extends Component {
 
         var logo = null;
         if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
-            logo =  <Image src={this.props.icon.url} className="logo" alt="Logo"/>
+            logo =  <Image src={this.props.icon.url} className="logo" alt="Logo" onError={(event)=>event.target.style.display='none'} />
         }
 
         var classname = "idp";
