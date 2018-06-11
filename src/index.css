@@ -53,6 +53,10 @@ html, body {
   font-size: 0.95em;
 }
 
+.text-left {
+    text-align: left;
+}
+
 .text-center {
   text-align: center;
 }
@@ -76,9 +80,14 @@ html, body {
        color: #777;
  }
 
-.about {
-  text-align: left;
+.licenceText {
+    font-style: italic;
+    margin-left: 1em;
+    padding-left: 1em;
+    border: 1px dotted;
+    margin-bottom: .5em;
 }
+
 /*
 a {
   color: #0080aa;
@@ -89,13 +98,7 @@ a {
   background-color: transparent;
 }
 
-.licenceText {
-  font-style: italic;
-  margin-left: 1em;
-  padding-left: 1em;
-  border: 1px dotted;
-  margin-bottom: .5em;
-}
+
 
 .about {
   text-align: left;
