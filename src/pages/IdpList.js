@@ -106,7 +106,7 @@ class IdpList extends Component {
                         </FormControl>
                     </OverlayTrigger>
                 </Col>
-                <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden>
+                <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden className="text-right">
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
