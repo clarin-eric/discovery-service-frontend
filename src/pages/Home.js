@@ -12,13 +12,7 @@ class Home extends Component {
     }
 
     render() {
-        return (
-            <div className="container">
-                <CookiesProvider>
-                    <VisibleIdpList  />
-                </CookiesProvider>
-            </div>
-        );
+        return (<CookiesProvider><VisibleIdpList  /></CookiesProvider>);
     }
 }
 
