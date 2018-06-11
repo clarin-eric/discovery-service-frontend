@@ -1,4 +1,6 @@
-VERSION=0.0.1-alpha5-showhide
+VERSION=0.0.1-alpha6
+
+all: clean build release
 
 build:
 	npm run build
