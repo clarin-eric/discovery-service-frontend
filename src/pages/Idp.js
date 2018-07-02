@@ -7,10 +7,12 @@ class Idp extends Component {
     render() {
         const country_code = this.props.country_code.toUpperCase()
         const country_label = this.props.country_label;
-        var img = country_code.toLowerCase()+".png";
-        if( country_code === 'EU' ) {
-            img = "europeanunion.png"
-        }
+
+        const type="svg"; //png
+        const dir="rectangle"; //rounded
+        const image_name="/images/flags/"+dir+"/"+country_code.toLowerCase()+"."+type;
+        const image_width=25
+        const image_height=25
 
         var logo = null;
         if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
@@ -34,7 +36,7 @@ class Idp extends Component {
                 <Col xs={8}>
                     <div className="idp-title">{this.props.name}</div>
                     <div className="idp-country">
-                        <img src={"/images/flags/"+img} alt={"Flag "+this.props.country}></img>
+                        <Image src={image_name} alt={"Flag "+this.props.country} width={image_width} height={image_height}/>
                         {country_label}
                     </div>
                 </Col>
