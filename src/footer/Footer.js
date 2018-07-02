@@ -5,18 +5,20 @@ import PropTypes from 'prop-types';
 class Footer extends Component {
     render() {
         return (
-            <div id="footer" className="container-fluid">
-                <Row>
-                    <Col lg={3}>
-                        <a href="/about">About</a><br /><span className="footer-fineprint">{this.props.version.value}</span>
-                    </Col>
-                    <Col lg={6}>
-                        <span className="footer-fineprint">Service provided by <a href="https://www.clarin.eu">CLARIN</a></span>
-                    </Col>
-                    <Col lg={3}>
-                        <a href="mailto:spf@clarin.eu">Contact</a>
-                    </Col>
-                </Row>
+            <div id="footer">
+                <div className="container">
+                    <Row>
+                        <Col lg={3} className="text-left">
+                            <a href="/about">About</a><br /><span className="footer-fineprint">{this.props.version.value}</span>
+                        </Col>
+                        <Col lg={6}>
+                            <span className="footer-fineprint">Service provided by <a href="https://www.clarin.eu">CLARIN</a></span>
+                        </Col>
+                        <Col lg={3} className="text-right">
+                            <a href="mailto:spf@clarin.eu">Contact</a>
+                        </Col>
+                    </Row>
+                </div>
             </div>
         );
     }

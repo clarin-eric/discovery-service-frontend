@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class About extends Component {
     render() {
         return (
-            <Row className="about">
+            <Row className="text-left">
                 <Col lg={12}>
                     <h1>About the CLARIN Discovery Service</h1>
                 </Col>
@@ -21,7 +21,7 @@ class About extends Component {
                 </Col>
                 <Col lg={12}>
                     <a name="credits"><h2>Credits</h2></a>
-                    <p>The following people have contributed to the VLO faceted browser:</p>
+                    <p>The following people have contributed to the CLARIN discovery service:</p>
                     <ul>
                         <li>André Moreira</li>
                         <li>Dieter van Uytvanck</li>

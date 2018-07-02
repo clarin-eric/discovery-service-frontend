@@ -3,6 +3,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+## Country flag icons
+
+https://www.flaticon.com/packs/countrys-flags?style_id=141&family_id=41&group_id=1&category_id=85
+
+Browser svg support: https://caniuse.com/#feat=svg
+    
 ## Example
 
 ```

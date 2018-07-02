@@ -72,6 +72,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 for(var i = 0; i < ext_idp.titles.length; i++) {
                     ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
                 }
+                ext_idp["display_title"] = getTitle( ext_idp, "en");
                 ext_idp["country_code"] = idp.country;
                 ext_idp["country_label"] = getFullCountry(idp.country);
                 idps.push(ext_idp);

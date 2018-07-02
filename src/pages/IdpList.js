@@ -84,7 +84,7 @@ class IdpList extends Component {
         console.log('Layout: '+this.state.layout);
 
         return (
-            <Col xs={12}>
+            <Col xs={12} className="minimal-padding">
                 <Col md={7} mdOffset={0} sm={6} smOffset={0}>
                     <InputGroup>
                         <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
@@ -106,7 +106,7 @@ class IdpList extends Component {
                         </FormControl>
                     </OverlayTrigger>
                 </Col>
-                <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden>
+                <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden className="text-right">
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
@@ -120,7 +120,7 @@ class IdpList extends Component {
 
     createPaginationSection() {
         return (
-            <Col xs={6} xsOffset={3}>
+            <Col xs={6} xsOffset={3} className="minimal-padding">
                 <Row>
                     <Col xs={4}>
                         <ButtonGroup>
@@ -164,7 +164,7 @@ class IdpList extends Component {
                 </Button>
             );
         }
-        return (<Col xs={6} xsOffset={3}>{btn}</Col>)
+        return (<Col md={6} mdOffset={3 } xs={12} xsOffset={0} className="minimal-padding">{btn}</Col>)
     }
 
     createErrorsSection() {
@@ -193,7 +193,7 @@ class IdpList extends Component {
         let rows = null;
         if(isFetching) {
             rows = (
-                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size}>
+                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size} className="minimal-padding">
                     <span>Loading idp data...</span>)
                 </Col>
             );
@@ -203,8 +203,8 @@ class IdpList extends Component {
                 <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size} onClick={e => {
                     e.preventDefault();
                     this.props.idpClick(this.props.cookies, idp.entityID)
-                }} key={idp.entityID}>
-                    <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
+                }} key={idp.entityID} className="minimal-padding">
+                    <Idp name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                 </Col>
             ))
         }
@@ -238,7 +238,7 @@ class IdpList extends Component {
         if (layout=== 2) {
             s_selected = {
                 md: {size: 10, offset: 1},
-                sm: {size: 10, offset: 1},
+                sm: {size: 12, offset: 0},
                 xs: {size: 12, offset: 0},
             }
         }
@@ -255,7 +255,7 @@ class IdpList extends Component {
                             this.props.idpClick(this.props.cookies, selected_idp.entityID)
                         }}>
                             <Idp
-                                name={selected_idp.titles[0].value}
+                                name={selected_idp.display_title}
                                 country_code={selected_idp.country_code}
                                 country_label={selected_idp.country_label}
                                 icon={selected_idp.icon}
@@ -290,7 +290,7 @@ class IdpList extends Component {
                             </Panel.Toggle>
                         </Panel.Heading>
                         <Panel.Collapse>
-                            <Panel.Body>
+                            <Panel.Body className="no-horizonal-padding">
                                 {this.createFilterSection()}
                                 {this.createIdpRows(s)}
                                 {this.createShowMoreSection()}
