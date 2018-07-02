@@ -204,7 +204,7 @@ class IdpList extends Component {
                     e.preventDefault();
                     this.props.idpClick(this.props.cookies, idp.entityID)
                 }} key={idp.entityID} className="minimal-padding">
-                    <Idp name={idp.titles[0].value} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
+                    <Idp name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                 </Col>
             ))
         }
@@ -255,7 +255,7 @@ class IdpList extends Component {
                             this.props.idpClick(this.props.cookies, selected_idp.entityID)
                         }}>
                             <Idp
-                                name={selected_idp.titles[0].value}
+                                name={selected_idp.display_title}
                                 country_code={selected_idp.country_code}
                                 country_label={selected_idp.country_label}
                                 icon={selected_idp.icon}
