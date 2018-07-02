@@ -1,4 +1,4 @@
-VERSION=0.0.1-alpha7
+VERSION=0.0.1-RC1
 
 all: clean build release
 
