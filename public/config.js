@@ -1,5 +1,5 @@
 var config = {
     "debug": false,
-    "version": "0.0.1-RC1",
+    "version": "{{VERSION}}",
     "endpoint": "https://discovery.clarin.eu/proxy",
 }
