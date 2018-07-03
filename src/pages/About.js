@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Row, Col} from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
 class About extends Component {
     render() {
@@ -17,7 +16,7 @@ class About extends Component {
                 </Col>
                 <Col lg={12}>
                     <a name="version"><h2>Version information</h2></a>
-                    <p>Application version number: {this.props.version.value}</p>
+                    <p>Application version number: {/*this.props.version.value*/window.config.version}</p>
                 </Col>
                 <Col lg={12}>
                     <a name="credits"><h2>Credits</h2></a>
@@ -55,19 +54,7 @@ class About extends Component {
     }
 }
 
-About.propTypes = {
-    version: PropTypes.shape({
-        fetching: PropTypes.bool.isRequired,
-        value: PropTypes.string.isRequired,
-    })
-}
-
-
-About.defaultProps = {
-    version: {
-        fetching: false,
-        value: "n/a"
-    },
-};
+About.propTypes = {}
+About.defaultProps = {};
 
 export default About;

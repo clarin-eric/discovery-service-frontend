@@ -2,15 +2,11 @@ import { connect } from 'react-redux'
 import About from '../pages/About'
 
 const mapStateToProps = state => {
-    return {
-        version: state.idp_list.version
-    }
+    return {}
 }
 
 const mapDispatchToProps = dispatch => {
-    return {
-
-    }
+    return {}
 }
 
 const AboutContainer = connect(

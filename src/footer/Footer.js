@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Row, Col} from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
 class Footer extends Component {
     render() {
@@ -9,7 +8,7 @@ class Footer extends Component {
                 <div className="container">
                     <Row>
                         <Col lg={3} className="text-left">
-                            <a href="/about">About</a><br /><span className="footer-fineprint">{this.props.version.value}</span>
+                            <a href="/about">About</a><br /><span className="footer-fineprint">{window.config.version}</span>
                         </Col>
                         <Col lg={6}>
                             <span className="footer-fineprint">Service provided by <a href="https://www.clarin.eu">CLARIN</a></span>
@@ -24,19 +23,7 @@ class Footer extends Component {
     }
 }
 
-Footer.propTypes = {
-    version: PropTypes.shape({
-        fetching: PropTypes.bool.isRequired,
-        value: PropTypes.string.isRequired,
-    })
-}
-
-
-Footer.defaultProps = {
-    version: {
-        fetching: false,
-        value: "n/a"
-    },
-};
+Footer.propTypes = {}
+Footer.defaultProps = {};
 
 export default Footer;
