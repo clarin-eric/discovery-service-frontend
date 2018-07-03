@@ -27,6 +27,7 @@ class About extends Component {
                         <li>Willem Elbers</li>
                     </ul>
                     <p>Icons by <a href="http://glyphicons.com/">Glyphicons</a> and <a href="https://fontawesome.com/">Font Awesome</a>.</p>
+                    <p>Country flag icons designed by Freepik from <a href="https://www.flaticon.com/">Flaticon</a>.</p>
                 </Col>
                 <Col lg={12}>
                     <a name="sources"><h2>Source code</h2></a>

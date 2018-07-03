@@ -11,10 +11,12 @@ class Footer extends Component {
                             <a href="/about">About</a><br /><span className="footer-fineprint">{window.config.version}</span>
                         </Col>
                         <Col lg={6}>
-                            <span className="footer-fineprint">Service provided by <a href="https://www.clarin.eu">CLARIN</a></span>
+                            <span className="footer-fineprint">
+                                Service provided by <a href={window.config.website}>CLARIN</a>
+                            </span>
                         </Col>
                         <Col lg={3} className="text-right">
-                            <a href="mailto:spf@clarin.eu">Contact</a>
+                            <a href={"mailto:"+window.config.support_contact}>Contact</a>
                         </Col>
                     </Row>
                 </div>

@@ -321,7 +321,7 @@ class IdpList extends Component {
                         <p className="justified">
                             Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
                             If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
-                            account <a href="https://user.clarin.eu/register">here</a>. For questions please contact <a href="mailto:spf@clarin.eu">spf@clarin.eu</a>.
+                            account <a href={window.config.user_registration_endpoint}>here</a>. For questions please contact <a href={"mailto:"+window.config.support_contact}>{window.config.support_contact}</a>.
                         </p>
                         {this.createErrorsSection()}
                     </Col>

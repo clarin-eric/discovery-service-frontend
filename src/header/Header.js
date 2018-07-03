@@ -13,7 +13,7 @@ class Header extends Component {
                 </Navbar.Header>
                 <Nav></Nav>
                 <Nav pullRight>
-                    <NavItem href="https://www.clarin.eu" className="clarin-logo-item">
+                    <NavItem href={window.config.website} className="clarin-logo-item">
                         <img src={logo} alt="logo" className="clarin-logo"></img>
                     </NavItem>
                 </Nav>
