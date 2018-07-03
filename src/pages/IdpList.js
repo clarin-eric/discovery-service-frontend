@@ -89,18 +89,19 @@ class IdpList extends Component {
                 <Col md={7} mdOffset={0} sm={6} smOffset={0}>
                     <InputGroup>
                         <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
-                        <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern}>
+                        <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern} trigger={['hover']}>
                             <FormControl
                                 type="text"
                                 defaultValue=""
                                 placeholder="Search for your home organization..."
-                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}} />
+                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}}
+                                autoFocus />
                         </OverlayTrigger>
                     </InputGroup>
                 </Col>
                 <Col md={3} sm={4}>
                     {country_label}
-                    <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry} trigger={['hover']}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
                             <option value="*" key="all">All countries</option>
                             {countries}
@@ -108,7 +109,7 @@ class IdpList extends Component {
                     </OverlayTrigger>
                 </Col>
                 <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden className="text-right">
-                    <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView} trigger={['hover']}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
                         <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
