@@ -5,6 +5,7 @@ import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleBut
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 import keydown from 'react-keydown';
+import { log_debug } from '../logging';
 
 class IdpList extends Component {
 
@@ -35,7 +36,7 @@ class IdpList extends Component {
             if (keydown.event.which === 13) {
                 const selected_idp = this.props.idps.selected_idp;
                 if (selected_idp) {
-                    console.log("Enter pressed, redirecting to:"+selected_idp.entityID);
+                    log_debug("Enter pressed, redirecting to:"+selected_idp.entityID);
                     this.props.idpClick(this.props.cookies, selected_idp.entityID);
                 }
             }
@@ -49,7 +50,7 @@ class IdpList extends Component {
         if (entityId) {
             this.props.setSelectedIdp(entityId)
         } else {
-            console.log("No selected entityId found");
+            log_debug("No selected entityId found");
         }
     }
 
@@ -81,7 +82,7 @@ class IdpList extends Component {
         const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
         const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
 
-        console.log('Layout: '+this.state.layout);
+        log_debug('Layout: '+this.state.layout);
 
         return (
             <Col xs={12} className="minimal-padding">
@@ -200,10 +201,9 @@ class IdpList extends Component {
         } else {
             //Generate grid layout
             rows = idps.map(idp => (
-                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size} onClick={e => {
-                    e.preventDefault();
-                    this.props.idpClick(this.props.cookies, idp.entityID)
-                }} key={idp.entityID} className="minimal-padding">
+                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size}
+                     onClick={e => {e.preventDefault();this.props.idpClick(this.props.cookies, idp.entityID)}}
+                     key={idp.entityID} className="minimal-padding">
                     <Idp name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                 </Col>
             ))
