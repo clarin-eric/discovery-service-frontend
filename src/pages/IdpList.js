@@ -5,6 +5,7 @@ import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleBut
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 import keydown from 'react-keydown';
+import { log_debug } from '../logging';
 
 class IdpList extends Component {
 
@@ -35,7 +36,7 @@ class IdpList extends Component {
             if (keydown.event.which === 13) {
                 const selected_idp = this.props.idps.selected_idp;
                 if (selected_idp) {
-                    console.log("Enter pressed, redirecting to:"+selected_idp.entityID);
+                    log_debug("Enter pressed, redirecting to:"+selected_idp.entityID);
                     this.props.idpClick(this.props.cookies, selected_idp.entityID);
                 }
             }
@@ -49,7 +50,7 @@ class IdpList extends Component {
         if (entityId) {
             this.props.setSelectedIdp(entityId)
         } else {
-            console.log("No selected entityId found");
+            log_debug("No selected entityId found");
         }
     }
 
@@ -81,25 +82,26 @@ class IdpList extends Component {
         const tooltipSearchCountry = (<Tooltip id="tooltip">Filter identity providers by country</Tooltip>)
         const tooltipToggleGridView = (<Tooltip id="tooltip">Switch to grid or list view</Tooltip>)
 
-        console.log('Layout: '+this.state.layout);
+        log_debug('Layout: '+this.state.layout);
 
         return (
             <Col xs={12} className="minimal-padding">
                 <Col md={7} mdOffset={0} sm={6} smOffset={0}>
                     <InputGroup>
                         <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
-                        <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern}>
+                        <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern} trigger={['hover']}>
                             <FormControl
                                 type="text"
                                 defaultValue=""
                                 placeholder="Search for your home organization..."
-                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}} />
+                                onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}}
+                                autoFocus />
                         </OverlayTrigger>
                     </InputGroup>
                 </Col>
                 <Col md={3} sm={4}>
                     {country_label}
-                    <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipSearchCountry} trigger={['hover']}>
                         <FormControl componentClass="select" placeholder="Filter by country" onChange={e => {e.preventDefault(); this.props.countryChange(e.target.value)}}>
                             <option value="*" key="all">All countries</option>
                             {countries}
@@ -107,7 +109,7 @@ class IdpList extends Component {
                     </OverlayTrigger>
                 </Col>
                 <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden className="text-right">
-                    <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView}>
+                    <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView} trigger={['hover']}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
                         <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
                         <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
@@ -200,10 +202,9 @@ class IdpList extends Component {
         } else {
             //Generate grid layout
             rows = idps.map(idp => (
-                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size} onClick={e => {
-                    e.preventDefault();
-                    this.props.idpClick(this.props.cookies, idp.entityID)
-                }} key={idp.entityID} className="minimal-padding">
+                <Col md={s.md.size} mdOffset={s.md.offset} sm={s.sm.size} smOffset={s.sm.offset} xs={s.xs.size}
+                     onClick={e => {e.preventDefault();this.props.idpClick(this.props.cookies, idp.entityID)}}
+                     key={idp.entityID} className="minimal-padding">
                     <Idp name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={layout}/>
                 </Col>
             ))

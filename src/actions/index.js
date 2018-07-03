@@ -10,8 +10,6 @@ export const SELECTED_IDP = 'SELECTED_IDP'
 export const SET_QUERY_PARAMETERS = 'SET_QUERY_PARAMETERS'
 export const SET_COUNTRY_FILTER = 'SET_COUNTRY_FILTER'
 export const SHOW_MORE_IDPS = 'SHOW_MORE_IDPS'
-export const REQUEST_VERSION = 'REQUEST_VERSION'
-export const RECEIVED_VERSION = 'RECEIVED_VERSION'
 
 /**
  * Request download if IDP json data
@@ -95,34 +93,9 @@ export const searchIdp = (string) => {
 export function fetchIdps() {
     return dispatch => {
         dispatch(requestIdps())
-        return fetch(`identity_providers.json`)
+        return fetch(window.config.endpoint)
             .then(response => response.json())
             .then(json => dispatch(receiveIdps(json)))
-    }
-}
-
-export function fetchVersion() {
-    return dispatch => {
-        dispatch(requestVersion())
-        return fetch(`version.json`)
-            .then(response => response.json())
-            .then(json => dispatch(receivedVersion(json)))
-    }
-}
-
-
-export const requestVersion = () => {
-    return {
-        type: REQUEST_VERSION,
-        requestedAt: Date.now()
-    }
-}
-
-export const receivedVersion = (json) => {
-    return {
-        type: RECEIVED_VERSION,
-        version: json.version,
-        receivedAt: Date.now()
     }
 }
 

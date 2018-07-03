@@ -1,4 +1,4 @@
-VERSION=0.0.1-RC1
+VERSION=0.0.1-RC2
 
 all: clean build release
 
@@ -9,5 +9,5 @@ clean:
 	rm -rf build
 
 release: clean build
-	echo "{\"version\": \"${VERSION}\"}" > build/version.json
+	sed -i '' "s/{{VERSION}}/${VERSION}/g" build/config.js
 	cd build && tar -pczvf "../discovery-service-frontend-${VERSION}.tar.gz" *

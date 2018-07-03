@@ -9,8 +9,8 @@ import {
     LAST_PAGE_IDPS,
     CLICKED_IDP,
     SELECTED_IDP, SET_QUERY_PARAMETERS, SET_COUNTRY_FILTER, SHOW_MORE_IDPS,
-    REQUEST_VERSION, RECEIVED_VERSION
 } from '../actions'
+import { log_debug, log_warn } from '../logging';
 
 const filter_pattern_character_treshhold = 1;
 
@@ -46,20 +46,6 @@ const filter_pattern_character_treshhold = 1;
 const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [], countries: [], filter_pattern: "", filter_country: "*", isFetching: false, index: 0, show: 12, items: [], filtered: [], selected_entityId: null, selected_idp: null}, action) => {
     var new_idx = 0;
     switch (action.type) {
-        case REQUEST_VERSION:
-            return Object.assign({}, state, {
-                version: {
-                    fetching: true,
-                    value: state.version.value
-                }
-             })
-        case RECEIVED_VERSION:
-            return Object.assign({}, state, {
-                version: {
-                    fetching: false,
-                    value: action.version
-                }
-            })
         case REQUEST_IDPS:
             return Object.assign({}, state, {
                 isFetching: true
@@ -68,14 +54,28 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             //Process IDP items to sanatize titles and resolve country_code to country_label
             var idps = [];
             action.idps.forEach(function(idp) {
-                var ext_idp = idp;
-                for(var i = 0; i < ext_idp.titles.length; i++) {
-                    ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
+                if (idp && idp.entityID) {
+                    var ext_idp = idp;
+                    for (var i = 0; i < ext_idp.titles.length; i++) {
+                        ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
+                    }
+                    ext_idp["display_title"] = getTitle(ext_idp, "en");
+
+                    let country_code = idp.country;
+                    //if (!country_code) {
+                    //    country_code = "-";
+                    //}
+                    ext_idp["country_code"] = country_code;
+
+                    let country_name = getFullCountry(country_code, idp.entityID);
+                    ext_idp["country_label"] = country_name
+
+                    if (country_name !== "Unknown") {
+                        idps.push(ext_idp);
+                    }
+                } else {
+                    log_warn("Skipped IDP entry with undefined entityID");
                 }
-                ext_idp["display_title"] = getTitle( ext_idp, "en");
-                ext_idp["country_code"] = idp.country;
-                ext_idp["country_label"] = getFullCountry(idp.country);
-                idps.push(ext_idp);
             });
 
             //Sort idp list
@@ -86,17 +86,12 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 if (x_title && y_title) {
                     return y.weight - x.weight || x_title.localeCompare(y_title);
                 }
-                console.log("Missing title. x: {entityid:"+x.entityID+", title:"+x_title+"}, y: {entityid:"+y.entityID+", title:"+y_title+"}");
+                log_debug("Missing title. x: {entityid:"+x.entityID+", title:"+x_title+"}, y: {entityid:"+y.entityID+", title:"+y_title+"}");
                 return 0;
             });
 
-            /*
-            idps.forEach(function(idp) {
-                console.log(getTitle(idp, 'en'));
-            });
-            */
             return Object.assign({}, state, {
-                countries: getCountries(action.idps),
+                countries: getCountries(idps),
                 isFetching: false,
                 items: action.idps,
                 filtered: idps,//action.idps,
@@ -109,7 +104,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             if (new_idx < 0) {
                 new_idx = 0;
             }
-            console.log("previous, new index="+new_idx);
+            log_debug("previous, new index="+new_idx);
             return Object.assign({}, state, {
                 index: new_idx
             })
@@ -122,7 +117,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             if (new_idx >= state.filtered.length) {
                 new_idx = state.filtered.length-1;
             }
-            console.log("next, new index="+new_idx);
+            log_debug("next, new index="+new_idx);
             return Object.assign({}, state, {
                 index: new_idx
             })
@@ -150,7 +145,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 var redirect_url = state.sp_return+"&entityID=" + action.entityId;
                 window.location.href = redirect_url;
             } else {
-                console.log("No SP return url found");
+                log_warn("No SP return url found");
             }
             return state
         case SELECTED_IDP:
@@ -173,7 +168,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 sp_return: action.sp_return
             })
         case SET_COUNTRY_FILTER:
-            console.log("Set country filter: "+action.country);
+            log_debug("Set country filter: "+action.country);
             return Object.assign({}, state, {
                 //filtered: filterByCountry(action.country, state.items)
                 filter_country: action.country,
@@ -246,7 +241,6 @@ function getCountries(list) {
  * @returns {*}
  */
 function filter(pattern, list) {
-
     var filtered = list;
     if(pattern.length > filter_pattern_character_treshhold) {
         var custom_filtered = []
@@ -296,20 +290,20 @@ function filterByCountry(country, list) {
  * @returns {*}
  */
 function combineFilters(pattern, country, list) {
-    console.log("Combining filters, pattern="+pattern+", country="+country+", #unfiltered entries="+list.length);
+    log_debug("Combining filters, pattern="+pattern+", country="+country+", #unfiltered entries="+list.length);
     var filtered = list;
     if (country) {
         filtered = filterByCountry(country, filtered)
     }
-    console.log("filtered by country: "+filtered.length);
+    log_debug("filtered by country: "+filtered.length);
     if(pattern) {
         filtered = filter(pattern, filtered)
     }
-    console.log("filtered by pattern: "+filtered.length);
+    log_debug("filtered by pattern: "+filtered.length);
     return filtered
 }
 
-function getFullCountry(code) {
+function getFullCountry(code, entityID) {
     var countries = {
         'EU': 'European Union',
         'AF': 'Afghanistan',
@@ -568,7 +562,8 @@ function getFullCountry(code) {
     if (code in countries) {
         return countries[code];
     }
-    return "Unkown";
+    log_warn("Country code \""+code+"\" unkown for: "+entityID);
+    return "Unknown";
 }
 
 export default idp_list
