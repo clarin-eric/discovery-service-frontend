@@ -9,7 +9,7 @@ import idpApp from './reducers';
 import { fetchIdps } from './actions';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import { log_info } from './logging';
+import { log_debug } from './logging';
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
@@ -24,11 +24,11 @@ setDefaulConfigValueIfNotSet("endpoint", ENDPOINT_DEFAULT_VALUE)
 
 function setDefaulConfigValueIfNotSet(prop_name, prop_value) {
     if(!window.config) {
-        log_info("Initializing new config object.");
+        log_debug("Initializing new config object.");
         window["config"] = {};
     }
     if(!window.config[prop_name]) {
-        log_info(prop_name+" not found, setting default value ("+prop_value+").");
+        log_debug(prop_name+" not found, setting default value ("+prop_value+").");
         window.config[prop_name] = prop_value;
     }
 }
