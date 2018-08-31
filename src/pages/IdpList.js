@@ -22,13 +22,44 @@ class IdpList extends Component {
             1 = grid view
             2 = list view
          */
+        const h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         this.state = {
+            height: h,
             layout: layout,
             expanded: !this.props.idps.selected_idp
         }
 
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
         this.toggle = this.toggle.bind(this);
+        this.registerWindowResizeListener = this.registerWindowResizeListener.bind(this);
+        this.registerWindowResizeListener();
+    }
+
+    registerWindowResizeListener() {
+        //console.log("registerWindowResizeListener");
+        window.addEventListener("resize", resizeThrottler, false);
+
+        var resizeTimeout;
+        function resizeThrottler() {
+            // ignore resize events as long as an actualResizeHandler execution is in the queue
+            if ( !resizeTimeout ) {
+                resizeTimeout = setTimeout(function() {
+                    resizeTimeout = null;
+                    actualResizeHandler();
+                    // The actualResizeHandler will execute at a rate of 15fps
+                }, 66);
+            }
+        }
+
+        var _this = this;
+        function actualResizeHandler() {
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            let s = _this.state;
+            if (h !== _this.state.h) {
+                s["height"] = h;
+                _this.setState(s);
+            }
+        }
     }
 
     componentWillReceiveProps( { keydown } ) {
@@ -271,36 +302,54 @@ class IdpList extends Component {
             );
         }
 
+        let panel = (
+            <Panel id="collapsible-panel-idplist" expanded={this.state.expanded} onToggle={e => {this.toggle()}} >
+                <Panel.Heading>
+                    <Panel.Toggle componentClass="div">
+                        <Panel.Title>
+                            <Row>
+                                <Col xs={11}>
+                                    Home organisation list
+                                </Col>
+                                <Col xs={1}>
+                                    <Glyphicon glyph={this.state.expanded === true ? "glyphicon glyphicon-chevron-down" : "glyphicon glyphicon-chevron-right"} />
+                                </Col>
+                            </Row>
+                        </Panel.Title>
+                    </Panel.Toggle>
+                </Panel.Heading>
+                <Panel.Collapse>
+                    <Panel.Body className="no-horizonal-padding">
+                        {this.createFilterSection()}
+                        {this.createIdpRows(s)}
+                        {this.createShowMoreSection()}
+                    </Panel.Body>
+                </Panel.Collapse>
+            </Panel>
+        );
+        if (this.state.height >= 500) {
+            panel = (
+                <Panel id="collapsible-panel-idplist">
+                    <Panel.Heading>
+                        <Panel.Title>
+                            <Row>
+                                <Col xs={12}>Home organisation list</Col>
+                            </Row>
+                        </Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body className="no-horizonal-padding">
+                        {this.createFilterSection()}
+                        {this.createIdpRows(s)}
+                        {this.createShowMoreSection()}
+                    </Panel.Body>
+                </Panel>
+            );
+        }
+
         return (
             <Row>
-                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
-                    {selected}
-                </Col>
-                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
-                    <Panel id="collapsible-panel-idplist" expanded={this.state.expanded} onToggle={e => {this.toggle()}} >
-                        <Panel.Heading>
-                            <Panel.Toggle componentClass="div">
-                                <Panel.Title>
-                                    <Row>
-                                        <Col xs={11}>
-                                            Home organisation list
-                                        </Col>
-                                        <Col xs={1}>
-                                            <Glyphicon glyph={this.state.expanded === true ? "glyphicon glyphicon-chevron-down" : "glyphicon glyphicon-chevron-right"} />
-                                        </Col>
-                                    </Row>
-                                </Panel.Title>
-                            </Panel.Toggle>
-                        </Panel.Heading>
-                        <Panel.Collapse>
-                            <Panel.Body className="no-horizonal-padding">
-                                {this.createFilterSection()}
-                                {this.createIdpRows(s)}
-                                {this.createShowMoreSection()}
-                            </Panel.Body>
-                        </Panel.Collapse>
-                    </Panel>
-                </Col>
+                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>{selected}</Col>
+                <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>{panel}</Col>
             </Row>
         )
 
@@ -315,6 +364,8 @@ class IdpList extends Component {
             main_colums.lg.size = 8;
             main_colums.lg.offset = 2;
         }
+
+        console.log("Height="+this.state.height);
 
         return (
             <div className="idpList">
