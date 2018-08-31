@@ -20,7 +20,7 @@
     <script src="fontawesome-all.min.js"></script>
 
     <!-- Load CLARIN bootstrap style -->
-    <link href="bootstrap-clarin-0.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-clarin-0.3.0/css/bootstrap.min.css" rel="stylesheet">
 
     <title>CLARIN Discovery Service</title>
 
@@ -30,5 +30,28 @@
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
+
+    <!-- Matomo -->
+    <script type="text/javascript">
+      if(window.config.piwik_id >= 0) {
+          var _paq = _paq || [];
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function () {
+              var u = "//stats.clarin.eu/";
+              _paq.push(['setTrackerUrl', u + 'piwik.php']);
+              _paq.push(['setSiteId', ''+window.config.piwik_id]);
+              var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+              g.type = 'text/javascript';
+              g.async = true;
+              g.defer = true;
+              g.src = u + 'piwik.js';
+              s.parentNode.insertBefore(g, s);
+          })();
+      }
+    </script>
+    <!-- End Matomo Code -->
+
   </body>
 </html>
