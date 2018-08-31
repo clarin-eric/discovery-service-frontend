@@ -62,9 +62,6 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                     ext_idp["display_title"] = getTitle(ext_idp, "en");
 
                     let country_code = idp.country;
-                    //if (!country_code) {
-                    //    country_code = "-";
-                    //}
                     ext_idp["country_code"] = country_code;
 
                     let country_name = getFullCountry(country_code, idp.entityID);
@@ -140,7 +137,9 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             })
         case CLICKED_IDP:
             if (state.sp_return) {
-                action.cookies.set("entityid", action.entityId, "/");
+                var expiration_date = new Date();
+                expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+                action.cookies.set("entityid", action.entityId, {path: "/", expires: expiration_date});
                 //TODO: check if ? exists in return url. If yes append with &, otherwise append with ?
                 var redirect_url = state.sp_return+"&entityID=" + action.entityId;
                 window.location.href = redirect_url;

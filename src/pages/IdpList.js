@@ -59,7 +59,9 @@ class IdpList extends Component {
         state.layout=event;
         this.setState(state);
         //Remember choice
-        this.props.cookies.set("layout", state.layout);
+        var expiration_date = new Date();
+        expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+        this.props.cookies.set("layout", state.layout, {path: "/", expires: expiration_date});
     }
 
     toggle() {

@@ -5,4 +5,5 @@ var config = {
     "user_registration_endpoint": "https://user.clarin.eu/user/register",
     "support_contact": "spf@clarin.eu",
     "website": "https://www.clarin.eu",
+    "piwik_id": -1,
 }
