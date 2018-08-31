@@ -95,7 +95,7 @@ class IdpList extends Component {
                             <FormControl
                                 type="text"
                                 defaultValue=""
-                                placeholder="Search for your home organization..."
+                                placeholder="Search for your home organisation..."
                                 onChange={e => {e.preventDefault(); this.props.patternChange(e.target.value)}}
                                 autoFocus />
                         </OverlayTrigger>
@@ -251,7 +251,7 @@ class IdpList extends Component {
         if (selected_idp) {
             selected = (
                 <Panel>
-                    <Panel.Heading><Panel.Title>Previously chosen home organization</Panel.Title></Panel.Heading>
+                    <Panel.Heading><Panel.Title>Previously chosen home organisation</Panel.Title></Panel.Heading>
                     <Panel.Body >
                         <Col md={s_selected.md.size} mdOffset={s_selected.md.offset} sm={s_selected.sm.size} smOffset={s_selected.sm.offset} xs={s_selected.xs.size} onClick={e => {
                             e.preventDefault();
@@ -283,7 +283,7 @@ class IdpList extends Component {
                                 <Panel.Title>
                                     <Row>
                                         <Col xs={11}>
-                                            Home organization list
+                                            Home organisation list
                                         </Col>
                                         <Col xs={1}>
                                             <Glyphicon glyph={this.state.expanded === true ? "glyphicon glyphicon-chevron-down" : "glyphicon glyphicon-chevron-right"} />
@@ -321,8 +321,8 @@ class IdpList extends Component {
                 <Row>
                     <Col lg={main_colums.lg.size} lgOffset={main_colums.lg.offset}>
                         <p className="justified">
-                            Select your identity provider below. This is usually the institution where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
-                            If you cannot find your institution in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
+                            Select your home organisation below. This is usually the organisation where you work or study. Signing in here will allow you to access certain CLARIN resources and services which are only available to users who have logged in.
+                            If you cannot find your organisation in the list below, please select the clarin.eu website account and use your CLARIN website credentials. If you don't have such credentials you can register an
                             account <a href={window.config.user_registration_endpoint}>here</a>. For questions please contact <a href={"mailto:"+window.config.support_contact}>{window.config.support_contact}</a>.
                         </p>
                         {this.createErrorsSection()}
