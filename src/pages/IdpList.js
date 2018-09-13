@@ -302,6 +302,7 @@ class IdpList extends Component {
             );
         }
 
+        /* Show a collapsible panel if the height is below a predefined threshold */
         let panel = (
             <Panel id="collapsible-panel-idplist" expanded={this.state.expanded} onToggle={e => {this.toggle()}} >
                 <Panel.Heading>
