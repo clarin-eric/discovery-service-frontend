@@ -1,4 +1,4 @@
-VERSION=0.0.1-RC3
+VERSION=2.0.0
 
 all: clean build release
 
