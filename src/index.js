@@ -7,7 +7,8 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
 import { fetchIdps } from './actions';
-import registerServiceWorker from './registerServiceWorker';
+//import registerServiceWorker from './registerServiceWorker';
+import {unregister} from './registerServiceWorker';
 import './index.css';
 import { log_debug } from './logging';
 
@@ -63,4 +64,5 @@ store.dispatch(fetchIdps())
  * Run applicaion
  */
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
-registerServiceWorker();
+//registerServiceWorker();
+unregister();
