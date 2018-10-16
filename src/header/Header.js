@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import logo from './clarin-logo-wide.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faIdCard } from '@fortawesome/free-regular-svg-icons'
+
 
 class Header extends Component {
     render() {
@@ -8,7 +11,7 @@ class Header extends Component {
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/"><i className="far fa-id-card fa-lg"></i><span className="title">Sign in via the CLARIN Service Provider Federation</span></a>
+                        <a href="/"><FontAwesomeIcon size="lg" icon={faIdCard} /><span className="title">Sign in via the CLARIN Service Provider Federation</span></a>
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Nav></Nav>
