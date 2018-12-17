@@ -56,6 +56,10 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             action.idps.forEach(function(idp) {
                 if (idp && idp.entityID) {
                     var ext_idp = idp;
+                    if(!ext_idp.titles) {
+                        ext_idp.titles = []
+                    }
+
                     for (var i = 0; i < ext_idp.titles.length; i++) {
                         ext_idp.titles[i].value = ext_idp.titles[i].value.trim();
                     }
@@ -67,7 +71,11 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                     let country_name = getFullCountry(country_code, idp.entityID);
                     ext_idp["country_label"] = country_name
 
-                    if (country_name !== "Unknown") {
+                    if (country_name === "Unknown") {
+                        log_warn("Skipping idp ("+idp.entityID+") with country name = Unkown.");
+                    } else if (ext_idp["display_title"] === null) {
+                        log_warn("Skipping idp ("+idp.entityID+") without display title.");
+                    } else {
                         idps.push(ext_idp);
                     }
                 } else {
@@ -179,9 +187,11 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
 }
 
 function getTitle(idp, lang) {
-    for (var i = 0; i < idp.titles.length; i++) {
-        if(idp.titles[i].language === lang) {
-            return idp.titles[i].value;
+    if (idp.titles) {
+        for (var i = 0; i < idp.titles.length; i++) {
+            if (idp.titles[i].language === lang) {
+                return idp.titles[i].value;
+            }
         }
     }
     return null;

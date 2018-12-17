@@ -36,7 +36,6 @@ class IdpList extends Component {
     }
 
     registerWindowResizeListener() {
-        //console.log("registerWindowResizeListener");
         window.addEventListener("resize", resizeThrottler, false);
 
         var resizeTimeout;
@@ -366,7 +365,7 @@ class IdpList extends Component {
             main_colums.lg.offset = 2;
         }
 
-        console.log("Height="+this.state.height);
+        log_debug("Height="+this.state.height);
 
         return (
             <div className="idpList">
