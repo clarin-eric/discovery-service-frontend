@@ -6,6 +6,8 @@ import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 import keydown from 'react-keydown';
 import { log_debug } from '../logging';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 
 class IdpList extends Component {
 
@@ -120,7 +122,7 @@ class IdpList extends Component {
             <Col xs={12} className="minimal-padding">
                 <Col md={7} mdOffset={0} sm={6} smOffset={0}>
                     <InputGroup>
-                        <InputGroup.Addon><i className="fas fa-search"></i></InputGroup.Addon>
+                        <InputGroup.Addon><FontAwesomeIcon size="lg" icon={faSearch} /></InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipSearchPattern} trigger={['hover']}>
                             <FormControl
                                 type="text"
@@ -159,11 +161,12 @@ class IdpList extends Component {
                     <Col xs={4}>
                         <ButtonGroup>
                             <Button onClick={e => {e.preventDefault(); this.props.previousPageClick()}}>
-                                <i className="fa fas fa-angle-left"></i>
+                                <FontAwesomeIcon size="lg" icon={faAngleLeft} />
                             </Button>
                             <Button onClick={e => {e.preventDefault(); this.props.firstPageClick()}}>
-                                <i className="fa fas fa-angle-double-left"></i>
-                            </Button>
+                                <FontAwesomeIcon size="lg" icon={faAngleDoubleLeft} />
+
+                                </Button>
                         </ButtonGroup>
                     </Col>
                     <Col xs={4} className="stats">
@@ -172,10 +175,10 @@ class IdpList extends Component {
                     <Col xs={4}>
                         <ButtonGroup>
                             <Button onClick={e => {e.preventDefault(); this.props.lastPageClick()}}>
-                                <i className="fa fas fa-angle-double-right"></i>
+                                <FontAwesomeIcon size="lg" icon={faAngleDoubleRight} />
                             </Button>
                             <Button onClick={e => {e.preventDefault(); this.props.nextPageClick()}}>
-                                <i className="fa fas fa-angle-right"></i>
+                                <FontAwesomeIcon size="lg" icon={faAngleRight} />
                             </Button>
                         </ButtonGroup>
                     </Col>
