@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import {Row, Col} from 'react-bootstrap';
+//import * as qs from "query-string";
 
 class Footer extends Component {
+    /*
+    constructor(props) {
+        super(props);
+        this.state = {"entity_id": null, "return": null}
+    }
+    componentWillMount() {
+        var query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+        this.setState({"entity_id": query.entityID, "return": query.return})
+    }
+*/
     render() {
         return (
             <div id="footer">

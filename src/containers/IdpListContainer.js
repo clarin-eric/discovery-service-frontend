@@ -1,6 +1,9 @@
 import { connect } from 'react-redux'
 import IdpList from '../pages/IdpList'
-import { nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp, idpClick, selectIdp, setCountryFilter, showMoreIdps } from '../actions'
+import {
+    nextPageIdps, previousPageIdps, firstPageIdps, lastPageIdps, searchIdp, idpClick, selectIdp, setCountryFilter,
+    showMoreIdps, fetchIdps
+} from '../actions'
 
 const getVisibleIdps = (idps, filter) => {
     switch (filter) {
@@ -20,9 +23,10 @@ const getVisibleIdps = (idps, filter) => {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownprops) => {
     return {
-        idps: getVisibleIdps(state.idp_list, state.visibilityFilter)
+        idps: getVisibleIdps(state.idp_list, state.visibilityFilter),
+        id: ownprops.id
     }
 }
 
@@ -54,6 +58,9 @@ const mapDispatchToProps = dispatch => {
         },
         setSelectedIdp: (entityId) => {
             dispatch(selectIdp(entityId))
+        },
+        fetchIdps: (feed_id) => {
+            dispatch(fetchIdps(feed_id))
         }
     }
 }

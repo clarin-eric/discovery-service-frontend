@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 class Home extends Component {
     componentWillMount() {
         var query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-        this.props.setQueryParameters(query.entityid, query.return)
+        this.props.setQueryParameters(query.entityID, query.return)
     }
 
     render() {
-        return (<CookiesProvider><VisibleIdpList  /></CookiesProvider>);
+        return (<CookiesProvider><VisibleIdpList id={this.props.match.params.id}  /></CookiesProvider>);
     }
 }
 

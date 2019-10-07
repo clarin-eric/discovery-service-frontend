@@ -6,7 +6,7 @@ import loggerMiddleware from 'redux-logger'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
-import { fetchIdps } from './actions';
+//import { fetchIdps } from './actions';
 //import registerServiceWorker from './registerServiceWorker';
 import {unregister} from './registerServiceWorker';
 import './index.css';
@@ -14,7 +14,7 @@ import { log_debug } from './logging';
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
-const ENDPOINT_DEFAULT_VALUE = "/identity_providers.json";
+const ENDPOINT_DEFAULT_VALUE = "/identity_providers_clarin.json";
 
 /*
  * Initialize configuration, use values if they exist, otherwise initialize with defaults
@@ -58,7 +58,7 @@ if (window.config.debug) {
 /*
  * Fetch initial data
  */
-store.dispatch(fetchIdps())
+//store.dispatch(fetchIdps())
 
 /*
  * Run applicaion

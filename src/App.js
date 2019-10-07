@@ -14,6 +14,7 @@ class App extends Component {
                     <div id="main">
                         <div className="container">
                             <Route exact path="/" component={QueryParametersEnhancedHome}/>
+                            <Route path="/feed/:id" component={QueryParametersEnhancedHome}/>
                             <Route path="/about" component={AboutContainer}/>
                         </div>
                     </div>

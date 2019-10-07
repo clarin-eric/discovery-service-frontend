@@ -1,3 +1,5 @@
+import { log_info, log_debug } from "../logging";
+
 export const REQUEST_IDPS = 'REQUEST_IDPS'
 export const RECEIVE_IDPS = 'RECEIVE_IDPS'
 export const NEXT_PAGE_IDPS = 'NEXT_PAGE_IDPS'
@@ -90,10 +92,25 @@ export const searchIdp = (string) => {
  *
  * @returns {function(*)}
  */
-export function fetchIdps() {
+export function fetchIdps(id) {
+    log_info("fetchIdps(id = "+id+")");
+
+    let url = "";
+    if (window.config.endpoints.hasOwnProperty(id)) {
+        url = window.config.endpoints[id].url;
+    } else {
+        log_info("No valid feed id specified, falling back to default clarin sp feed...");
+        for(var key in window.config.endpoints) {
+           if(window.config.endpoints[key].default) {
+               url = window.config.endpoints[key].url;
+           }
+        };
+    }
+    log_debug("Feed url="+url);
+
     return dispatch => {
         dispatch(requestIdps())
-        return fetch(window.config.endpoint)
+        return fetch(url)
             .then(response => response.json())
             .then(json => dispatch(receiveIdps(json)))
     }
