@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import PropTypes from 'prop-types';
-import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Panel, Row, Col, Button, ButtonGroup, InputGroup, FormControl, ToggleButtonGroup, ToggleButton, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Idp from './Idp';
 import { withCookies, Cookies } from 'react-cookie';
 import keydown from 'react-keydown';
 import { log_debug } from '../logging';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight, faTh, faThList, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 class IdpList extends Component {
 
@@ -149,8 +149,8 @@ class IdpList extends Component {
                 <Col md={2} sm={2} mdOffset={0} smOffset={0} xsHidden className="text-right">
                     <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView} trigger={['hover']}>
                     <ToggleButtonGroup type="radio" value={this.state.layout} onChange={this.handleLayoutChange} name="layout">
-                        <ToggleButton value={1}><Glyphicon glyph="th" /></ToggleButton>
-                        <ToggleButton value={2}><Glyphicon glyph="th-list" /></ToggleButton>
+                        <ToggleButton value={1}><FontAwesomeIcon size="lg" icon={faTh} /></ToggleButton>
+                        <ToggleButton value={2}><FontAwesomeIcon size="lg" icon={faThList} /></ToggleButton>
                     </ToggleButtonGroup>
                     </OverlayTrigger>
                 </Col>
@@ -319,7 +319,7 @@ class IdpList extends Component {
                                     Home organisation list
                                 </Col>
                                 <Col xs={1}>
-                                    <Glyphicon glyph={this.state.expanded === true ? "glyphicon glyphicon-chevron-down" : "glyphicon glyphicon-chevron-right"} />
+                                    <FontAwesomeIcon size="lg" icon={this.state.expanded === true ? faChevronDown : faChevronRight} />
                                 </Col>
                             </Row>
                         </Panel.Title>
