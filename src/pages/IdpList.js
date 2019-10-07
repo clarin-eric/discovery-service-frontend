@@ -86,6 +86,10 @@ class IdpList extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.fetchIdps(this.props.id);
+    }
+
     handleLayoutChange(event) {
         var state = this.state;
         state.layout=event;

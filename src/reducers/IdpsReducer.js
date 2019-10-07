@@ -144,6 +144,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                 filtered: combineFilters(action.pattern, state.filter_country, state.items)
             })
         case CLICKED_IDP:
+            console.log(state);
             if (state.sp_return) {
                 var expiration_date = new Date();
                 expiration_date.setFullYear(expiration_date.getFullYear() + 10);
@@ -162,17 +163,27 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
             })
         case SET_QUERY_PARAMETERS:
             var errors = [];
-            if (!action.sp_entity_id) {
+            if (!state.sp_entity_id && !action.sp_entity_id) {
                     errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID provided by service provider."});
             }
-            if (!action.sp_return) {
+            if (!state.sp_return && !action.sp_return) {
                 errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+            }
+
+            let new_sp_entity_id = state.sp_entity_id;
+            if(!new_sp_entity_id) {
+                new_sp_entity_id = action.sp_entity_id;
+            }
+
+            let new_sp_return = state.sp_return;
+            if(!new_sp_return) {
+                new_sp_return = action.sp_return;
             }
 
             return Object.assign({}, state, {
                 errors: state.errors.concat(errors),
-                sp_entity_id: action.sp_entity_id,
-                sp_return: action.sp_return
+                sp_entity_id: new_sp_entity_id,
+                sp_return: new_sp_return
             })
         case SET_COUNTRY_FILTER:
             log_debug("Set country filter: "+action.country);

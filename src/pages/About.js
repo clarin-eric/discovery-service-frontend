@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Row, Col} from 'react-bootstrap';
 
 class About extends Component {
+
     render() {
         return (
             <Row className="text-left">
