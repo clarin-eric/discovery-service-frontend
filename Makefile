@@ -1,4 +1,6 @@
-VERSION=2.0.6
+ifeq ($(VERSION),)
+VERSION := none
+endif
 
 all: clean build release
 
@@ -14,5 +16,5 @@ clean:
 
 release: clean deps build
 	sed -i "s/{{VERSION}}/${VERSION}/g" build/config.js
-	echo "Travis tag: ${TRAVIS_TAG}"
+	echo "Travis tag: ${VERSION}"
 	cd build && tar -pczvf "../discovery-service-frontend-${VERSION}.tar.gz" *

@@ -6,7 +6,7 @@ node_js:
 install: /bin/true
 
 script:
-  - make release
+  - make VERSION=${TRAVIS_TAG} release
   
 deploy:
   provider: releases
