@@ -13,5 +13,4 @@ clean:
 	rm -rf build
 
 release: clean deps build
-	./update_version.sh "${VERSION}"
-	cd build && tar -pczf "../discovery-service-frontend-${VERSION}.tar.gz" *
+	./travis_release.sh "${VERSION}"
