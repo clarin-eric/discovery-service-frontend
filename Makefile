@@ -1,7 +1,3 @@
-ifeq ($(strip $(VERSION)),)
-override VERSION = $(git rev-parse --short HEAD)
-endif
-
 all: clean build release
 
 deps:
@@ -12,9 +8,10 @@ build:
 	npm run build
 
 clean:
+	echo "REVISION=${REVISION}"
+	echo "VERSION=${VERSION}"
 	rm -rf build
 
 release: clean deps build
-	sed -i "s/{{VERSION}}/${VERSION}/g" build/config.js
-	echo "Travis tag: ${VERSION}"
+    update_version.sh "${VERSION}"
 	cd build && tar -pczf "../discovery-service-frontend-${VERSION}.tar.gz" *
