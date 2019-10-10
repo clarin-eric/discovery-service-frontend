@@ -1,5 +1,4 @@
 ifeq ($(strip $(VERSION)),)
-echo "VERSION is empty"
 override VERSION = $(git rev-parse --short HEAD)
 endif
 
