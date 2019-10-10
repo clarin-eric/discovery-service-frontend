@@ -1,5 +1,6 @@
 ifeq ($(strip $(VERSION)),)
-VERSION := $(git rev-parse --short HEAD)
+echo "VERSION is empty"
+override VERSION = $(git rev-parse --short HEAD)
 endif
 
 all: clean build release
