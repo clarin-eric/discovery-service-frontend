@@ -1,5 +1,5 @@
-ifeq ($(VERSION),)
-VERSION := none
+ifeq ($(strip $(VERSION)),)
+VERSION := $(git rev-parse --short HEAD)
 endif
 
 all: clean build release
@@ -17,4 +17,4 @@ clean:
 release: clean deps build
 	sed -i "s/{{VERSION}}/${VERSION}/g" build/config.js
 	echo "Travis tag: ${VERSION}"
-	cd build && tar -pczvf "../discovery-service-frontend-${VERSION}.tar.gz" *
+	cd build && tar -pczf "../discovery-service-frontend-${VERSION}.tar.gz" *
