@@ -3,7 +3,7 @@ VERSION=2.0.6
 all: clean build release
 
 deps:
-    npm install
+	npm install
 
 build:
 	npm run build
