@@ -65,7 +65,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                     }
                     ext_idp["display_title"] = getTitle(ext_idp, "en");
 
-                    let country_code = idp.country;
+                    let country_code = idp.countryCode;
                     ext_idp["country_code"] = country_code;
 
                     let country_name = getFullCountry(country_code, idp.entityID);
