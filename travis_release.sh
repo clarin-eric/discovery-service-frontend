@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 VERSION=$1
 
 if [ -z ${VERSION+x} ]; then
