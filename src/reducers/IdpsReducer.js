@@ -294,7 +294,7 @@ function filterByCountry(country, list) {
         filtered = list;
     } else {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].country === country) {
+            if (list[i].countryCode === country) {
                 filtered.push(list[i]);
             }
         }
