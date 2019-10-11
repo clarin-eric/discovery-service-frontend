@@ -8,8 +8,6 @@ build:
 	npm run build
 
 clean:
-	echo "REVISION=${REVISION}"
-	echo "VERSION=${VERSION}"
 	rm -rf build
 
 release: clean deps build
