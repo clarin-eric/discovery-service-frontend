@@ -65,7 +65,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
                     }
                     ext_idp["display_title"] = getTitle(ext_idp, "en");
 
-                    let country_code = idp.countryCode;
+                    let country_code = idp.country;
                     ext_idp["country_code"] = country_code;
 
                     let country_name = getFullCountry(country_code, idp.entityID);
@@ -231,7 +231,7 @@ function getSelectedIdp(list, entityId) {
 function getCountries(list) {
     var countries = [];
     list.forEach(function(idp) {
-        var current = idp.countryCode;
+        var current = idp.country;
 
         //Check the current list to see if the current country is already in the list
         var exists = false;
@@ -294,7 +294,7 @@ function filterByCountry(country, list) {
         filtered = list;
     } else {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].countryCode === country) {
+            if (list[i].country === country) {
                 filtered.push(list[i]);
             }
         }
