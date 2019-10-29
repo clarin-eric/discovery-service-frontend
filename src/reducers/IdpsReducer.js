@@ -472,7 +472,7 @@ function getFullCountry(code, entityID) {
         'LT': 'Lithuania',
         'LU': 'Luxembourg',
         'MO': 'Macau', //Macao|Macao Special Administrative Region of the People's Republic of China
-        'MK': 'Macedonia', //Republic of Macedonia|FYR Macedonia|Macedonia, the former Yugoslav Republic of
+        'MK': 'North Macedonia', //Republic of Macedonia|FYR Macedonia|Macedonia, the former Yugoslav Republic of
         'MG': 'Madagascar',
         'MW': 'Malawi',
         'MY': 'Malaysia',
