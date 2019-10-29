@@ -320,6 +320,19 @@ function combineFilters(pattern, country, list) {
         filtered = filter(pattern, filtered)
     }
     log_debug("filtered by pattern: "+filtered.length);
+
+    //Sort filtered result
+    filtered.sort(function(x, y) {
+        //Sort on weight first, then on title (en) alphabetically
+        const x_title = getTitle(x, 'en');
+        const y_title = getTitle(y, 'en');
+        if (x_title && y_title) {
+            return y.weight - x.weight || x_title.localeCompare(y_title);
+        }
+        log_debug("Missing title. x: {entityid:"+x.entityID+", title:"+x_title+"}, y: {entityid:"+y.entityID+", title:"+y_title+"}");
+        return 0;
+    });
+
     return filtered
 }
 
