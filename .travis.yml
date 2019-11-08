@@ -11,8 +11,7 @@ script:
 deploy:
   provider: releases
   prerelease: true
-  api_key:
-    secure: "${DEPLOY_TOKEN}"
+  api_key: "${DEPLOY_TOKEN}"
   file: "discovery-service-frontend-${TRAVIS_TAG}.tar.gz"
   skip_cleanup: true
   on:
