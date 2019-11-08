@@ -11,6 +11,8 @@ import idpApp from './reducers';
 import {unregister} from './registerServiceWorker';
 import './index.css';
 import { log_debug } from './logging';
+//IE 11 polyfill
+import "core-js/stable";
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
