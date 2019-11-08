@@ -53,6 +53,7 @@ const idp_list = (state = {version: {fetching: false, value: "n/a"}, errors: [],
         case RECEIVE_IDPS:
             //Process IDP items to sanatize titles and resolve country_code to country_label
             var idps = [];
+            console.log(action);
             action.idps.forEach(function(idp) {
                 if (idp && idp.entityID) {
                     var ext_idp = idp;

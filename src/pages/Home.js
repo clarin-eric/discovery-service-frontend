@@ -6,7 +6,7 @@ import * as qs from 'query-string';
 import PropTypes from 'prop-types';
 
 class Home extends Component {
-    componentWillMount() {
+    componentDidMount() {
         var query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
         this.props.setQueryParameters(query.entityID, query.return)
     }
