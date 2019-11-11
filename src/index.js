@@ -1,3 +1,6 @@
+//IE 11 polyfill, must be loaded before react
+import "core-js/stable";
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -11,8 +14,7 @@ import idpApp from './reducers';
 import {unregister} from './registerServiceWorker';
 import './index.css';
 import { log_debug } from './logging';
-//IE 11 polyfill
-import "core-js/stable";
+
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
