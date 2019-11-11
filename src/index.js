@@ -1,5 +1,7 @@
 //IE 11 polyfill, must be loaded before react
 import "core-js/stable";
+//IE11 fetch polyfill
+import 'whatwg-fetch';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,12 +11,9 @@ import loggerMiddleware from 'redux-logger'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
 import idpApp from './reducers';
-//import { fetchIdps } from './actions';
-//import registerServiceWorker from './registerServiceWorker';
 import {unregister} from './registerServiceWorker';
 import './index.css';
 import { log_debug } from './logging';
-
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
