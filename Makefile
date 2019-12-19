@@ -2,7 +2,7 @@ all: clean build release
 
 deps:
 	npm install
-	npm i webpack@4.41.0 --save-dev
+	npm i webpack@4.41.2 --save-dev
 
 build:
 	npm run build
