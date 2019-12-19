@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/clarin-eric/discovery-service-frontend.svg?branch=master)](https://travis-ci.org/clarin-eric/discovery-service-frontend)
+[![Build Status](https://travis-ci.org/clarin-eric/discovery-service-frontend.svg?branch=develop)](https://travis-ci.org/clarin-eric/discovery-service-frontend)
+[![Known Vulnerabilities](https://snyk.io/test/github/clarin-eric/discovery-service-frontend/badge.svg)](https://snyk.io/test/github/clarin-eric/discovery-service-frontend)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

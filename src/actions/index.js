@@ -32,7 +32,7 @@ export const requestIdps = () => {
 export const receiveIdps = (json) => {
     return {
         type: RECEIVE_IDPS,
-        idps: json.discojuice,
+        idps: json,
         receivedAt: Date.now()
     }
 }

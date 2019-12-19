@@ -1,6 +1,8 @@
-VERSION=2.0.6
-
 all: clean build release
+
+deps:
+	npm install
+	npm i webpack@4.41.2 --save-dev
 
 build:
 	npm run build
@@ -8,6 +10,5 @@ build:
 clean:
 	rm -rf build
 
-release: clean build
-	sed -i '' "s/{{VERSION}}/${VERSION}/g" build/config.js
-	cd build && tar -pczvf "../discovery-service-frontend-${VERSION}.tar.gz" *
+release: clean deps build
+	./travis_release.sh "${VERSION}"

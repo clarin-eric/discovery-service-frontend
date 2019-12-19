@@ -1,6 +1,7 @@
 var config = {
     "debug": false,
     "version": "{{VERSION}}",
+    "image_version": "{{DOCKER_IMAGE_VERSION}}",
     "endpoints": {
         "clarin": { "url": "/identity_providers_clarin.json", "default": true},
         "edugain": { "url": "/identity_providers_edugain.json", "default": false}

@@ -62,7 +62,7 @@ class IdpList extends Component {
             }
         }
     }
-
+/*
     componentWillReceiveProps( { keydown } ) {
         if ( keydown.event ) {
             if (keydown.event.which === 13) {
@@ -74,7 +74,19 @@ class IdpList extends Component {
             }
         }
     }
-
+*/
+    componentDidUpdate( { keydown } ) {
+        if ( keydown.event ) {
+            if (keydown.event.which === 13) {
+                const selected_idp = this.props.idps.selected_idp;
+                if (selected_idp) {
+                    log_debug("Enter pressed, redirecting to:"+selected_idp.entityID);
+                    this.props.idpClick(this.props.cookies, selected_idp.entityID);
+                }
+            }
+        }
+    }
+/*
     componentWillMount() {
         const { cookies } = this.props;
         //Set the selected idp entity id if a cookie with a valid value exists
@@ -85,8 +97,17 @@ class IdpList extends Component {
             log_debug("No selected entityId found");
         }
     }
-
+*/
     componentDidMount() {
+        //Set the selected idp entity id if a cookie with a valid value exists
+        const { cookies } = this.props;
+        var entityId = cookies.get('entityid')
+        if (entityId) {
+            this.props.setSelectedIdp(entityId)
+        } else {
+            log_debug("No selected entityId found");
+        }
+        //Start fetching of idps
         this.props.fetchIdps(this.props.id);
     }
 
