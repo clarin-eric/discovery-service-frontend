@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Col, Image} from 'react-bootstrap';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import {idpClick} from "../actions";
+import {useDispatch} from "react-redux";
+import {useCookies} from "react-cookie";
 
-class Idp extends Component {
+const Idp = (props) => {
+        const dispatch = useDispatch();
+        const [cookies, setCookie, removeCookie] = useCookies(['entityid']);
 
-    render() {
-        const country_code = this.props.country_code.toUpperCase()
-        const country_label = this.props.country_label;
+        const country_code = props.country_code.toUpperCase()
+        const country_label = props.country_label;
 
         const type="svg"; //png
         const dir="rectangle"; //rounded
@@ -15,13 +21,13 @@ class Idp extends Component {
         const image_height=25
 
         var logo = null;
-        if(this.props.icon !== null && this.props.icon !== undefined && this.props.icon.url !== "") {
-            logo =  <Image src={this.props.icon.url} className="logo" alt="Logo" onError={(event)=>event.target.style.display='none'} />
+        if(props.icon && props.icon.url !== "") {
+            logo =  <Image fluid src={props.icon.url} className="logo" alt="Logo" onError={(event)=>event.target.style.display='none'} />
         }
 
         var classname = "idp";
         var logo_container_classname = "logo-container";
-        if (this.props.layout === 2) {
+        if (props.layout === 2) {
             //wide layout
             classname += " idp-wide";
             logo_container_classname += " logo-container-wide";
@@ -32,20 +38,23 @@ class Idp extends Component {
         }
 
         return (
-            <div className={classname}>
+            <Row
+                className={classname+" d-flex align-items-center"}
+                onClick={e => {setCookie("entityid", props.entityID, {path: "/"}); dispatch(idpClick({}, props.entityID));}}
+            >
                 <Col xs={8}>
-                    <div className="idp-title">{this.props.name}</div>
+                    <div className="idp-title">{props.name}</div>
                     <div className="idp-country">
-                        <Image src={image_name} alt={"Flag "+this.props.country} width={image_width} height={image_height}/>
+                        <Image src={image_name} alt={"Flag "+props.country} width={image_width} height={image_height}/>
                         {country_label}
                     </div>
                 </Col>
                 <Col xs={4} className={logo_container_classname}>
                     {logo}
                 </Col>
-            </div>
+            </Row>
         );
-    }
+
 }
 
 Idp.propTypes = {

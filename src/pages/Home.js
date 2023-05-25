@@ -1,23 +1,28 @@
-import React, { Component } from 'react';
-import './Home.css';
-import VisibleIdpList from '../containers/IdpListContainer.js';
+import React from 'react';
+import { useDispatch } from "react-redux";
+import IdpView from "./IdpList";
 import { CookiesProvider } from 'react-cookie';
-import * as qs from 'query-string';
-import PropTypes from 'prop-types';
+import queryString from 'query-string';
+import {createQueryParametersAction, fetchIdps} from "../actions";
+import { useParams } from 'react-router-dom';
 
-class Home extends Component {
-    componentDidMount() {
-        var query = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-        this.props.setQueryParameters(query.entityID, query.return)
-    }
+import './Home.css';
 
-    render() {
-        return (<CookiesProvider><VisibleIdpList id={this.props.match.params.id}  /></CookiesProvider>);
-    }
+const Home = (props) => {
+    const dispatch = useDispatch();
+    const urlParams = useParams();
+
+    React.useEffect(() => {
+        const query = queryString.parse(window.location.search, { ignoreQueryPrefix: true });
+        dispatch(createQueryParametersAction(query.entityID, query.return));
+        dispatch(fetchIdps(urlParams.id))
+    }, [dispatch, urlParams]);
+
+    return (
+        <CookiesProvider>
+            <IdpView id={urlParams.id} />
+        </CookiesProvider>
+    );
 }
-
-Home.propTypes = {
-    setQueryParameters: PropTypes.func.isRequired,
-};
 
 export default Home;
