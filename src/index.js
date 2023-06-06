@@ -16,7 +16,7 @@ import './index.css';
 import { log_debug } from './logging';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
-import 'clarin-bootstrap/clarin-bootstrap.css';
+import 'clarin-bootstrap/dist/clarin-bootstrap.css';
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";

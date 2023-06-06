@@ -9,7 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "bootstrap": "^5.2.3",
-    "clarin-bootstrap": "file:../clarin-bootstrap",
+    "clarin-bootstrap": "git://github.com/WillemElbers/clarin-bootstrap.git#4125692",
     "core-js": "^3.30.1",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
