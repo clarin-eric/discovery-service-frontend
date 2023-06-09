@@ -41,8 +41,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: cd build && tar -pczf "../discovery-service-frontend-.tar.gz" *
-    - run: cd build && ls -l
+    - run: ls -l
     - run: env
+    - run: cat $GITHUB_OUTPUT
     
   release:
     name: "Release"
