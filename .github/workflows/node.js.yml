@@ -54,11 +54,9 @@ jobs:
   release:
     name: "Release"
     needs: [prepare, build]
-    # Run job for github releases and tag pushes (without github release)
-    if: github.event_name == 'release' || needs.prepare.outputs.create_release == 'true'
+    # Run job for github releases
+    #if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    env:
-      TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
       - uses: actions/download-artifact@master
         with:
