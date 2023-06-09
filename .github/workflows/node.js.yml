@@ -63,6 +63,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: build-output
+          path: build/
       - run: pwd && ls -l
       - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
       - run: ls -l
