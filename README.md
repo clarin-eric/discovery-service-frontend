@@ -1,5 +1,5 @@
-![Build CI](https://github.com/clarin-eric/discovery-service-frontend/actions/workflows/node.js.yml/badge.svg)
-![Known Vulnerabilities](https://snyk.io/test/github/clarin-eric/discovery-service-frontend/badge.svg)
+* ![Build CI](https://github.com/clarin-eric/discovery-service-frontend/actions/workflows/node.js.yml/badge.svg)
+* [Known Vulnerabilities](https://app.snyk.io/org/clarin-eric/project/159a68ce-6273-4239-a94b-b7afd4da242d)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
