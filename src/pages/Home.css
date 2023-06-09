@@ -1,17 +1,19 @@
+.filter {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
 .idp {
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: left;
     overflow:hidden;
     font-size: 0.95em;
-    width: 100%;
+    /*width: 100%;*/
+    padding: 0px 10px 0px 10px;
 }
 .idp-box {
     margin: 5px;
-    padding-left: 5px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
     text-align: left;
     min-height: 95px;
     max-height: 95px;
@@ -20,7 +22,6 @@
 
 .idp-wide {
     margin: 2px;
-    padding: 3px;
     text-align: left;
     min-height: 70px;
     max-height: 70px;
@@ -86,4 +87,8 @@
 .idp-grid {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.panel-body {
+    padding: 10px;
 }

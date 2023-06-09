@@ -4,16 +4,19 @@ import "core-js/stable";
 import 'whatwg-fetch';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 import thunkMiddleware from 'redux-thunk'
 import loggerMiddleware from 'redux-logger'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from "redux";
-import idpApp from './reducers';
+import rootReducer from './reducers';
 import {unregister} from './registerServiceWorker';
 import './index.css';
 import { log_debug } from './logging';
+
+//import 'bootstrap/dist/css/bootstrap.min.css';
+import 'clarin-bootstrap/clarin-bootstrap.css';
 
 const DEBUG_DEFAULT_VALUE = false;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
@@ -43,7 +46,7 @@ function setDefaulConfigValueIfNotSet(prop_name, prop_value) {
 let store = null;
 if (window.config.debug) {
     store = createStore(
-        idpApp,
+        rootReducer,
         applyMiddleware(
             thunkMiddleware, // lets us dispatch() functions
             loggerMiddleware // neat middleware that logs actions
@@ -51,7 +54,7 @@ if (window.config.debug) {
     );
 } else {
     store = createStore(
-        idpApp,
+        rootReducer,
         applyMiddleware(
             thunkMiddleware, // lets us dispatch() functions
         )
@@ -59,13 +62,16 @@ if (window.config.debug) {
 }
 
 /*
- * Fetch initial data
- */
-//store.dispatch(fetchIdps())
-
-/*
  * Run applicaion
  */
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </React.StrictMode>
+);
+
 //registerServiceWorker();
 unregister();
