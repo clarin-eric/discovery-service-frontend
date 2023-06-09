@@ -5,9 +5,8 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
+  release:
 
 jobs:
   prepare:
@@ -16,6 +15,7 @@ jobs:
     outputs:
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
+      - run: printf "Event:${{ github.event_name }}"
       - name: Get the version
         id: get_version
         run: if [ "${GITHUB_EVENT_NAME}" == "push" ]; then echo "VERSION=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT; else echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT; fi
@@ -29,10 +29,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-        #node-version: [14.x, 16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    env:
-      TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -42,25 +39,35 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
-    - run: pwd && ls -l && env
-    - run: echo "Artifact file:${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz"
     - uses: actions/upload-artifact@master
       with:
-        name: release-tarball-artifact
-        path: discovery-service-frontend-${{ env.TARBALL_VERSION }}.tar.gz
+        name: build-output
+        path: build/
         retention-days: 1
           
   release:
     name: "Release"
     needs: [prepare, build]
-    # Run job for github releases and tag pushes (without github release)
-    if: github.event_name == 'release' || needs.prepare.outputs.create_release == 'true'
+    # Run job for github releases
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     env:
       TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
-      - uses: actions/download-artifact@master
+      - name: Download build output artifact
+        uses: actions/download-artifact@master
         with:
-          name: release-tarball-artifact
-      - run: pwd && ls -l
+          name: build-output
+          path: build/
+      - name: Create release tarball
+        run: cd build && tar -pczvf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./discovery-service-frontend-${{ env.TARBALL_VERSION }}.tar.gz
+          asset_name: discovery-service-frontend-${{ env.TARBALL_VERSION }}.tar.gz
+          asset_content_type: application/tar+gzip

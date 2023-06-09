@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import Header from './header/Header.js';
-import FooterContainer from './containers/FooterContainer';
-import QueryParametersEnhancedHome from './containers/HomeContainer.js';
-import AboutContainer from './containers/AboutContainer';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-class App extends Component {
-    render() {
-        return (
-            <Router>
-                <div className="main">
-                    <Header />
-                    <div id="main">
-                        <div className="container">
-                            <Route exact path="/" component={QueryParametersEnhancedHome}/>
-                            <Route path="/feed/:id" component={QueryParametersEnhancedHome}/>
-                            <Route path="/about" component={AboutContainer}/>
-                        </div>
+import Header from './header/Header.js';
+import Footer from './footer/Footer';
+import Home from './pages/Home';
+import About from './pages/About';
+
+const App = () => {
+    return (
+        <BrowserRouter>
+            <div className="main">
+                <Header />
+                <div id="main">
+                    <div className="container my-4">
+                        <Routes>
+                            <Route exact path="/" element={<Home />}/>
+                            <Route path="/feed/:id" element={<Home />}/>
+                            <Route path="/about" element={<About />}/>
+                        </Routes>
                     </div>
-                    <FooterContainer />
                 </div>
-            </Router>
-        );
-    }
+                <Footer />
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;
