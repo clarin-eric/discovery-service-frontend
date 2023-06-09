@@ -44,11 +44,11 @@ jobs:
     - run: npm run build --if-present
     - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
     - run: pwd && ls -l && env
-    - run: echo "Path:${GITHUB_ACTION_PATH}"
+    - run: echo "Path:${GITHUB_WORKSPACE}"
     - uses: actions/upload-artifact@master
       with:
         name: upload-tarball-artifact
-        path: ./discovery-service-frontend-${TARBALL_VERSION}.tar.gz
+        path: ${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz
     
   release:
     name: "Release"
@@ -63,4 +63,4 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: download-tarball-artifact
-          path: ./discovery-service-frontend-${TARBALL_VERSION}.tar.gz
+          path: ${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz
