@@ -12,3 +12,4 @@ clean:
 
 release: clean deps build
 	./travis_release.sh "${VERSION}"
+npm --version
