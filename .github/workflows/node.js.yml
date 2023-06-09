@@ -43,7 +43,11 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
-    - run: ls -l
+    - run: pwd && ls -l
+    - uses: actions/upload-artifact@master
+      with:
+        name: upload-tarball-artifact
+        path: ./discovery-service-frontend-${TARBALL_VERSION}.tar.gz
     
   release:
     name: "Release"
@@ -51,5 +55,11 @@ jobs:
     # Run job for github releases and tag pushes (without github release)
     if: github.event_name == 'release' || needs.prepare.outputs.create_release == 'true'
     runs-on: ubuntu-latest
+    env:
+      TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
       - run: pwd
+      - uses: actions/download-artifact@master
+        with:
+          name: download-tarball-artifact
+          path: ./discovery-service-frontend-${TARBALL_VERSION}.tar.gz
