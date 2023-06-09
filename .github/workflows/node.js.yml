@@ -47,8 +47,9 @@ jobs:
     - run: echo "Artifact file:${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz"
     - uses: actions/upload-artifact@master
       with:
-        name: upload-tarball-artifact
-        path: ${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz
+        name: release-tarball-artifact
+        path: discovery-service-frontend-${TARBALL_VERSION}.tar.gz
+        retention-days: 1
     
   release:
     name: "Release"
@@ -59,8 +60,7 @@ jobs:
     env:
       TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
-      - run: pwd
       - uses: actions/download-artifact@master
         with:
-          name: download-tarball-artifact
-          path: ${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz
+          name: release-tarball-artifact
+      - run: pwd && ls -l
