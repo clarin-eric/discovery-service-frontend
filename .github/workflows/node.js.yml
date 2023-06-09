@@ -44,6 +44,7 @@ jobs:
     - run: npm run build --if-present
     - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
     - run: pwd && ls -l
+    - run: echo "Path: ${GITHUB_ACTION_PATH}"
     - uses: actions/upload-artifact@master
       with:
         name: upload-tarball-artifact
