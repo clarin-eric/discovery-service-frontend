@@ -30,8 +30,8 @@ jobs:
         node-version: [16.x]
         #node-version: [14.x, 16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    env:
-      TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
+    #env:
+    #  TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -42,13 +42,13 @@ jobs:
     - run: npm ci
     - run: ls -l && ls -l node_modules && ls -l src
     - run: npm run build --if-present
-    - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
-    - run: pwd && ls -l && env
-    - run: echo "Artifact file:${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz"
+    #- run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
+    #- run: pwd && ls -l && env
+    #- run: echo "Artifact file:${GITHUB_WORKSPACE}/discovery-service-frontend-${TARBALL_VERSION}.tar.gz"
     - uses: actions/upload-artifact@master
       with:
         name: release-tarball-artifact
-        path: discovery-service-frontend-${{ env.TARBALL_VERSION }}.tar.gz
+        path: build/discovery-service-frontend-${{ env.TARBALL_VERSION }}.tar.gz
         retention-days: 1
           
   release:
@@ -57,9 +57,13 @@ jobs:
     # Run job for github releases
     #if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    env:
+      TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
       - uses: actions/download-artifact@master
         with:
           name: release-tarball-artifact
       - run: pwd && ls -l
+      - run: cd build && tar -pczf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
+      - run: ls -l
 
