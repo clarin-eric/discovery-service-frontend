@@ -68,7 +68,7 @@ jobs:
           path: build/
 #      - run: pwd && ls -l
       - name: Create release tarball
-          run: cd build && tar -pczvf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
+        run: cd build && tar -pczvf "../discovery-service-frontend-${TARBALL_VERSION}.tar.gz" *
  #     - run: ls -l
       - name: Upload Release Asset
         id: upload-release-asset
