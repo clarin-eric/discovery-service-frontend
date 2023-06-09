@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Get the version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+        run: if [ "${GITHUB_EVENT_NAME}" == "push" ]; then echo "VERSION=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT; else echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT; fi
         
   build:
     name: "Build"
