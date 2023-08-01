@@ -238,7 +238,7 @@ function getTitle(idp, lang) {
 function getSelectedIdp(list, entityId) {
     var selected_idp = null;
     list.forEach(function(idp) {
-        if (idp.entityID === entityId) {
+        if (idp && idp.entityID === entityId) {
             selected_idp = idp;
         }
     });
