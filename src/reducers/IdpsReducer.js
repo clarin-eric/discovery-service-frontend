@@ -69,6 +69,10 @@ Process IDP items to sanitize titles and resolve country_code to country_label
  */
 const processIdp = (idp_in) => {
     let ext_idp = null;
+
+//    console.log("Idp_in: ", idp_in);
+//    console.log("Ext_idp: ", ext_idp);
+
     if (idp_in && idp_in.entityID) {
         ext_idp = idp_in;
         if(!ext_idp.titles) {
@@ -87,13 +91,14 @@ const processIdp = (idp_in) => {
         ext_idp["country_label"] = country_name
 
         if (country_name === "Unknown") {
-            log_warn("Skipping idp ("+idp_in.entityID+") with country name = Unkown.");
+            log_warn("Skipping idp ("+idp_in.entityID+") with country name = Unknown.");
             ext_idp = null
         } else if (ext_idp["display_title"] === null) {
             log_warn("Skipping idp ("+idp_in.entityID+") without display title.");
             ext_idp = null
         }
     }
+
     return ext_idp
 }
 
@@ -109,16 +114,13 @@ const filterIdps = (idps, activeFilter) => {
         return idps;
     }
 
-    log_debug("Combining filters, pattern="+activeFilter.text+", country="+activeFilter.country+", #unfiltered entries="+idps.length);
     let filtered = idps;
     if (activeFilter.country) {
         filtered = filterByCountry(activeFilter.country, idps)
     }
-    log_debug("filtered by country: "+filtered.length);
     if(activeFilter.text) {
         filtered = filterByName(activeFilter.text, filtered)
     }
-    log_debug("filtered by pattern: "+filtered.length);
 
     return filtered
 }
@@ -162,6 +164,7 @@ const idp_list = (state = initialIdpState, action) => {
                 isFetching: true
             })
         case RECEIVE_IDPS:
+            console.log("Action: ", action);
             return Object.assign({}, state, {
                 countries: getCountries(action.idps.map(idp => processIdp(idp))),
                 isFetching: false,
@@ -179,9 +182,18 @@ const idp_list = (state = initialIdpState, action) => {
             if (state.sp_return) {
                 //TODO: check if ? exists in return url. If yes append with &, otherwise append with ?
                 var redirect_url = state.sp_return+"&entityID=" + action.entityId;
+                if(action.digest) {
+                    redirect_url = state.sp_return+"&uy_select_authn=saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".&uy_auto_login=true&IdPselected=true";
+                }
+
+                //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_select_authn=saml._entryFromMetadata_[MD5 Hex hash oh IdP entityID]%2B1.&uy_auto_login=true&IdPselected=true&signInId=4b4fc889-b850-4d1a-bf50-cc7f04d72353
                 window.location.href = redirect_url;
             } else {
-                log_warn("No SP return url found");
+                if(action.digest) {
+                    log_warn("No SP return url found. Redirect url: &uy_select_authn=saml._entryFromMetadata_" + action.digest + "%2B" + action.digestIndex + ".&uy_auto_login=true&IdPselected=true");
+                } else {
+                    log_warn("No SP return url found.");
+                }
             }
             return state
         case SELECTED_IDP:

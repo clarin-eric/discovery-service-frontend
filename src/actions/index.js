@@ -50,7 +50,7 @@ export function fetchIdps(id) {
            }
         };
     }
-    log_debug("Feed url="+url);
+    log_info("Feed url="+url);
 
     return (dispatch, getState) => {
         const { filter } = getState();
@@ -61,10 +61,12 @@ export function fetchIdps(id) {
     }
 }
 
-export function idpClick(cookies, entityId) {
+export function idpClick(cookies, entityId, digest, digestIndex) {
     return {
         type: CLICKED_IDP,
         entityId: entityId,
+        digest: digest,
+        digestIndex: digestIndex,
         cookies: cookies
     }
 }

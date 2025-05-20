@@ -72,11 +72,20 @@ const IdpGridOrListContainer = (props) => {
     const items = [];
     for(let i = index; i < filtered.length && i < show; i++) {
         const idp = filtered[i];
-        items.push(
-            <Col lg={props.bootstrap_grid.lg} md={props.bootstrap_grid.md} sm={props.bootstrap_grid.sm} xs={props.bootstrap_grid.xs} key={idp.entityID} className="minimal-padding">
-                <Idp entityID={idp.entityID} name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={props.layout}/>
-            </Col>
-        );
+        if(idp !== null) {
+            items.push(
+                <Col lg={props.bootstrap_grid.lg} md={props.bootstrap_grid.md} sm={props.bootstrap_grid.sm}
+                     xs={props.bootstrap_grid.xs} key={idp.entityID} className="minimal-padding">
+                    <Idp entityID={idp.entityID}
+                         digest={idp.digest}
+                         digestIndex={idp.digest_index}
+                         name={idp.display_title} country_code={idp.country_code}
+                         country_label={idp.country_label} icon={idp.icon} layout={props.layout}/>
+                </Col>
+            );
+        } else {
+            console.log("Idp is null, index="+i+", filtered=". filtered);
+        }
     }
 
     return (
@@ -404,7 +413,8 @@ const IdpView = (props)  => {
     log_debug("Height="+height);
 
     const filtered = idps.filtered;// applyFilter(idps.filtered, filter);
-
+    //console.log("Filtered:", filtered);
+    //console.log("Selected:", idps.selected_idp);
     return (
         <div className="idpList">
             <Row>
@@ -426,6 +436,8 @@ const IdpView = (props)  => {
                             layout={s_selected}
                             element={<Idp
                                 entityID={idps.selected_idp.entityID}
+                                digest={idps.selected_idp.digest}
+                                digestIndex={idps.selected_idp.digest_index}
                                 name={idps.selected_idp.display_title}
                                 country_code={idps.selected_idp.country_code}
                                 country_label={idps.selected_idp.country_label}
