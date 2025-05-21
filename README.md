@@ -19,22 +19,25 @@ http(s)://<hostname>/feed/:idp_data_feed?<query_parameters>
 ## Supported Parameters
 
 ```
-/feed/:idp_data_feed   (optional) Specify which idp feed to use. Supported values: 'clarin' or 'edugain', 
-                        where 'clarin' is the default value if not provided. These feeds can be defined in the config.js
-                        file.
+/feed/:idp_data_feed   (optional) Specify which idp feed to use. Supported values: 'clarin' 
+                        or 'edugain', where 'clarin' is the default value if not provided. 
+                        These feeds can be defined in the config.js file.
 ```
 
 ## Supported Query Parameters
 
 ```
-entityId  (required) The entityID of the SP that called the discovery service. Must be in url encoded form.
-return    (required) The return URL to redirect the user to after selecting an IDP. entityID=<value> will be appended
-            to signal the user selected IDP. Must be in url encoded form.
+entityId  (required) The entityID of the SP that called the discovery service. Must be in 
+            url encoded form.
+return    (required) The return URL to redirect the user to after selecting an IDP. 
+            entityID=<value> will be appended to signal the user selected IDP. Must be in 
+            url encoded form.
                       
-            If a `uy_auto_login` query parameter is found the unity-idm auto login flow is triggered and an 
-            extra query parameter (`uy_select_authn`) with the entityID digest and index in unity-idm format
-            is appended
-debug     (optional) Used to override the configured debug setting. Accepts 'true' or 'false'. 
+            If a `uy_auto_login` query parameter is found the unity-idm auto login flow 
+            is triggered and an extra query parameter (`uy_select_authn`) with the 
+            entityID digest and index in unity-idm format is appended
+debug     (optional) Used to override the configured debug setting. Accepts 'true' or 
+            'false'. 
 ```
 
 ## Example
