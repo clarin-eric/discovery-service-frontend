@@ -6,13 +6,15 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 # Usage
 
-Generic pattern to access the discovery service:
+There are two flavors of the generic pattern to access the discovery service:
 
+1. Standard location with most common defaults
 ```
-http(s)://<hostname>/?<query_parameters>
+http(s)://<hostname>/?<query_parameters> 
+```
 
-or 
-
+2. Or using a custom feed
+```
 http(s)://<hostname>/feed/:idp_data_feed?<query_parameters>
 ```
 
