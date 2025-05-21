@@ -186,7 +186,7 @@ const FiltersSection = () => {
     //Suffering from Scrollbar jitter on render of popovers and tooltips
     //See: https://github.com/react-bootstrap/react-bootstrap/issues/6563#issuecomment-1435500271
     //Side effect that first tooltip is always shown on first page load
-    const tt_showTriggerEvents = ['hover'];
+    const tt_showTriggerEvents = ['hover', 'focus'];
     const tt_Style = {position: "fixed"};
     const tooltipSearchPattern = (<Tooltip id="tooltip" style={tt_Style}>Search for a specific identity provider</Tooltip>)
     const tooltipSearchCountry = (<Tooltip id="tooltip" style={tt_Style}>Filter identity providers by country</Tooltip>)

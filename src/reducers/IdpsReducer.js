@@ -164,7 +164,6 @@ const idp_list = (state = initialIdpState, action) => {
                 isFetching: true
             })
         case RECEIVE_IDPS:
-            console.log("Action: ", action);
             return Object.assign({}, state, {
                 countries: getCountries(action.idps.map(idp => processIdp(idp))),
                 isFetching: false,
@@ -179,21 +178,39 @@ const idp_list = (state = initialIdpState, action) => {
                 show: state.show+12
             })
         case CLICKED_IDP:
+            //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_select_authn=saml._entryFromMetadata_[MD5 Hex hash oh IdP entityID]%2B1.&uy_auto_login=true&IdPselected=true&signInId=4b4fc889-b850-4d1a-bf50-cc7f04d72353
+            //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_auto_login=true&IdPselected=true
+            //url encoded (use https://www.urlencoder.org/):
+            //  https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue
+            //
+            //Example with unity auto login:
+            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue
+            //Example without unity auto login:
+            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3FIdPselected%3Dtrue
+            log_debug("SP return=", state.sp_return);
             if (state.sp_return) {
-                //TODO: check if ? exists in return url. If yes append with &, otherwise append with ?
-                var redirect_url = state.sp_return+"&entityID=" + action.entityId;
-                if(action.digest) {
-                    redirect_url = state.sp_return+"&uy_select_authn=saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".&uy_auto_login=true&IdPselected=true";
+                const search = state.sp_return.split("?")[1];
+                const searchParams = new URLSearchParams(search);
+                //Build the base return url. Keep all query parameters (if any) and add the selected entityId
+                var redirect_url = state.sp_return;
+                if(searchParams.toString() === "") { //No query parameters
+                    redirect_url += "?entityID=" + action.entityId;
+                } else { //Existing query parameters
+                    redirect_url += "&entityID=" + action.entityId;
+                }
+                //If unity auto login was requested (uy_auto_login query parameter is present), add the digest and index
+                //for the selected idp.
+                log_debug("Unity auto login? " + searchParams.has("uy_auto_login"), searchParams);
+                if(searchParams.has("uy_auto_login") && action.digest) {
+                    redirect_url += "&uy_select_authn=saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".";
+                } else if(searchParams.has("uy_auto_login") && !action.digest) {
+                    log_warn("Unity auto login was selected (uy_auto_login=true), but no idp digest data is available.");
                 }
 
-                //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_select_authn=saml._entryFromMetadata_[MD5 Hex hash oh IdP entityID]%2B1.&uy_auto_login=true&IdPselected=true&signInId=4b4fc889-b850-4d1a-bf50-cc7f04d72353
-                window.location.href = redirect_url;
+                log_debug("Redirect_url: ", redirect_url);
+                //window.location.href = redirect_url;
             } else {
-                if(action.digest) {
-                    log_warn("No SP return url found. Redirect url: &uy_select_authn=saml._entryFromMetadata_" + action.digest + "%2B" + action.digestIndex + ".&uy_auto_login=true&IdPselected=true");
-                } else {
-                    log_warn("No SP return url found.");
-                }
+                log_warn("No SP return url found. Action: ", action);
             }
             return state
         case SELECTED_IDP:

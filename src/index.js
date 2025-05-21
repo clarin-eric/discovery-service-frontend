@@ -13,7 +13,7 @@ import { createStore, applyMiddleware } from "redux";
 import rootReducer from './reducers';
 import {unregister} from './registerServiceWorker';
 import './index.css';
-import { log_debug } from './logging';
+import { log_debug, log_info } from './logging';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import 'clarin-bootstrap/clarin-bootstrap.css';
@@ -38,6 +38,13 @@ function setDefaulConfigValueIfNotSet(prop_name, prop_value) {
         log_debug(prop_name+" not found, setting default value ("+prop_value+").");
         window.config[prop_name] = prop_value;
     }
+}
+
+//Override debug settings from config if custom value is supplied as query parameter
+const searchParams = new URLSearchParams(window.location.search);
+if(searchParams.has("debug")) {
+    log_info("Overriding default debug value ("+window.config.debug+") with " + searchParams.get("debug") + " from query parameter.");
+    window.config["debug"] = searchParams.get("debug") === "true";
 }
 
 /*
