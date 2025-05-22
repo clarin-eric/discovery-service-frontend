@@ -208,7 +208,9 @@ const idp_list = (state = initialIdpState, action) => {
 
                 const redirect_url = base + "?" + searchParams.toString();
                 log_debug("Redirect_url: ", redirect_url);
-                window.location.href = redirect_url;
+                if(window.config.redirect) {
+                    window.location.href = redirect_url;
+                }
             } else {
                 log_warn("No SP return url found. Action: ", action);
             }

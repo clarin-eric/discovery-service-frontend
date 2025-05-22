@@ -19,6 +19,7 @@ import { log_debug, log_info } from './logging';
 import 'clarin-bootstrap/clarin-bootstrap.css';
 
 const DEBUG_DEFAULT_VALUE = false;
+const REDIRECT_DEFAULT_VALUE = true;
 const VERSION_DEFAULT_VALUE = "0.0.1-default";
 const ENDPOINT_DEFAULT_VALUE = "/identity_providers_clarin.json";
 
@@ -26,6 +27,7 @@ const ENDPOINT_DEFAULT_VALUE = "/identity_providers_clarin.json";
  * Initialize configuration, use values if they exist, otherwise initialize with defaults
  */
 setDefaulConfigValueIfNotSet("debug", DEBUG_DEFAULT_VALUE)
+setDefaulConfigValueIfNotSet("redirect", REDIRECT_DEFAULT_VALUE)
 setDefaulConfigValueIfNotSet("version", VERSION_DEFAULT_VALUE)
 setDefaulConfigValueIfNotSet("endpoint", ENDPOINT_DEFAULT_VALUE)
 
@@ -43,8 +45,12 @@ function setDefaulConfigValueIfNotSet(prop_name, prop_value) {
 //Override debug settings from config if custom value is supplied as query parameter
 const searchParams = new URLSearchParams(window.location.search);
 if(searchParams.has("debug")) {
-    log_info("Overriding default debug value ("+window.config.debug+") with " + searchParams.get("debug") + " from query parameter.");
+    log_info("Overriding default debug value ("+window.config.debug+") = " + searchParams.get("debug") + " from query parameter.");
     window.config["debug"] = searchParams.get("debug") === "true";
+}
+if(searchParams.has("noredirect")) {
+    log_info("Setting redirect value = " + (searchParams.get("noredirect") !== "true") + " from query parameter.");
+    window.config["redirect"] = searchParams.get("noredirect") !== "true";
 }
 
 /*
