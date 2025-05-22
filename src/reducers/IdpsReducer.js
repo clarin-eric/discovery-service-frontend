@@ -189,26 +189,26 @@ const idp_list = (state = initialIdpState, action) => {
             //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3FIdPselected%3Dtrue
             log_debug("SP return=", state.sp_return);
             if (state.sp_return) {
+                const base = state.sp_return.split("?")[0];
                 const search = state.sp_return.split("?")[1];
                 const searchParams = new URLSearchParams(search);
+
                 //Build the base return url. Keep all query parameters (if any) and add the selected entityId
-                var redirect_url = state.sp_return;
-                if(searchParams.toString() === "") { //No query parameters
-                    redirect_url += "?entityID=" + action.entityId;
-                } else { //Existing query parameters
-                    redirect_url += "&entityID=" + action.entityId;
-                }
+                searchParams.set("entityID", action.entityId);
+
                 //If unity auto login was requested (uy_auto_login query parameter is present), add the digest and index
                 //for the selected idp.
                 log_debug("Unity auto login? " + searchParams.has("uy_auto_login"), searchParams);
                 if(searchParams.has("uy_auto_login") && action.digest) {
-                    redirect_url += "&uy_select_authn=saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".";
+                    searchParams.set("uy_select_authn", "saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".");
+                    searchParams.set("IdPselected", true);
                 } else if(searchParams.has("uy_auto_login") && !action.digest) {
                     log_warn("Unity auto login was selected (uy_auto_login=true), but no idp digest data is available.");
                 }
 
+                const redirect_url = base + "?" + searchParams.toString();
                 log_debug("Redirect_url: ", redirect_url);
-                //window.location.href = redirect_url;
+                window.location.href = redirect_url;
             } else {
                 log_warn("No SP return url found. Action: ", action);
             }
