@@ -200,7 +200,7 @@ const idp_list = (state = initialIdpState, action) => {
                 //for the selected idp.
                 log_debug("Unity auto login? " + searchParams.has("uy_auto_login"), searchParams);
                 if(searchParams.has("uy_auto_login") && action.digest) {
-                    searchParams.set("uy_select_authn", "saml._entryFromMetadata_"+action.digest+"%2B"+action.digestIndex+".");
+                    searchParams.set("uy_select_authn", "saml._entryFromMetadata_"+action.digest+"+"+action.digestIndex+".");
                     searchParams.set("IdPselected", true);
                 } else if(searchParams.has("uy_auto_login") && !action.digest) {
                     log_warn("Unity auto login was selected (uy_auto_login=true), but no idp digest data is available.");
@@ -222,11 +222,15 @@ const idp_list = (state = initialIdpState, action) => {
             })
         case SET_QUERY_PARAMETERS:
             var errors = [];
-            if (!state.sp_entity_id && !action.sp_entity_id) {
-                    errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID provided by service provider."});
+            console.log("SET_QUERY_PARAMETERS: ", action);
+            if ((!state.sp_entity_id && !action.sp_entity_id) && !action.unityAutoLogin) {
+                    errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
             }
             if (!state.sp_return && !action.sp_return) {
                 errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+            }
+            if(!isValidUrl(action.sp_return)) {
+                errors.push({"code": "ERROR_INVALID_RETURN_URL", "message": "Return url is not a valid URL."});
             }
 
             let new_sp_entity_id = state.sp_entity_id;
@@ -246,6 +250,16 @@ const idp_list = (state = initialIdpState, action) => {
             })
         default:
             return state
+    }
+}
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (e) {
+        console.log("Not a valid url: "+string, e);
+        return false;
     }
 }
 

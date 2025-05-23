@@ -14,7 +14,8 @@ const Home = (props) => {
 
     React.useEffect(() => {
         const query = queryString.parse(window.location.search, { ignoreQueryPrefix: true });
-        dispatch(createQueryParametersAction(query.entityID, query.return));
+        console.log("Query: ", query);
+        dispatch(createQueryParametersAction(query.entityID, query.return, query.uy_auto_login));
         dispatch(fetchIdps(urlParams.id))
     }, [dispatch, urlParams]);
 

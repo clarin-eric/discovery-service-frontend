@@ -303,6 +303,9 @@ const ErrorsSection = (props) => {
         } else if (err.code === "ERROR_NO_SP_ENTITY_ID") {
             showUrlQueryParamErrorMsg = true;
             console.error("Error regarding URL query parameters: ", err)
+        } else if (err.code === "ERROR_INVALID_RETURN_URL") {
+            showUrlQueryParamErrorMsg = true;
+            console.error("Error regarding URL query parameters: ", err)
         }
     }
 
