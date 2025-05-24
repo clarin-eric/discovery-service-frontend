@@ -78,11 +78,12 @@ export function selectIdp(entityId) {
     }
 }
 
-export function createQueryParametersAction(sp_entity_id, sp_return, unityAutoLogin) {
+export function createQueryParametersAction(sp_entity_id, sp_return, unityAutoLogin, otherQueryParams) {
     return {
         type: SET_QUERY_PARAMETERS,
         sp_entity_id: sp_entity_id,
         sp_return: sp_return,
-        unityAutoLogin: unityAutoLogin
+        unityAutoLogin: unityAutoLogin,
+        otherQueryParams: otherQueryParams
     }
 }

@@ -193,6 +193,16 @@ const idp_list = (state = initialIdpState, action) => {
                 const search = state.sp_return.split("?")[1];
                 const searchParams = new URLSearchParams(search);
 
+                //Add any otherQueryParams to the return url
+                /*
+                log_info("Added to otherQueryParams: ", state.otherQueryParams);
+                if(state.otherQueryParams) {
+                    for (const [key, value] of Object.entries(state.otherQueryParams)) {
+                        searchParams.set(key, value);
+                    }
+                }
+                */
+                
                 //Build the base return url. Keep all query parameters (if any) and add the selected entityId
                 searchParams.set("entityID", action.entityId);
 
@@ -223,8 +233,20 @@ const idp_list = (state = initialIdpState, action) => {
         case SET_QUERY_PARAMETERS:
             var errors = [];
             console.log("SET_QUERY_PARAMETERS: ", action);
-            if ((!state.sp_entity_id && !action.sp_entity_id) && !action.unityAutoLogin) {
-                    errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
+
+            let unityAutoLogin = false;
+            //Fetch uy_auto_login parameter from return url if it exists
+            if(action.sp_return) {
+                const returnSearch = action.sp_return.split("?")[1];
+                const returnSearchParams = new URLSearchParams(returnSearch);
+                if(returnSearchParams.has("uy_auto_login") && returnSearchParams.get("uy_auto_login") === "true") {
+                    unityAutoLogin = true;
+                }
+            }
+
+            //We expect an SP entity ID or uy_auto_login=true from the return parameter
+            if ((!state.sp_entity_id && !action.sp_entity_id) && !unityAutoLogin) {
+                errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
             }
             if (!state.sp_return && !action.sp_return) {
                 errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
@@ -246,7 +268,8 @@ const idp_list = (state = initialIdpState, action) => {
             return Object.assign({}, state, {
                 errors: state.errors.concat(errors),
                 sp_entity_id: new_sp_entity_id,
-                sp_return: new_sp_return
+                sp_return: new_sp_return,
+                otherQueryParams: action.otherQueryParams
             })
         default:
             return state
