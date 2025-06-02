@@ -202,7 +202,7 @@ const idp_list = (state = initialIdpState, action) => {
                     }
                 }
                 */
-                
+
                 //Build the base return url. Keep all query parameters (if any) and add the selected entityId
                 searchParams.set("entityID", action.entityId);
 
@@ -281,7 +281,6 @@ function isValidUrl(string) {
         new URL(string);
         return true;
     } catch (e) {
-        console.log("Not a valid url: "+string, e);
         return false;
     }
 }

@@ -41,6 +41,7 @@ export function fetchIdps(id) {
 
     let url = "";
     if (window.config.endpoints.hasOwnProperty(id)) {
+        log_debug("Endpoints: ", window.config.endpoints);
         url = window.config.endpoints[id].url;
     } else {
         log_info("No valid feed id specified, falling back to default clarin sp feed...");
