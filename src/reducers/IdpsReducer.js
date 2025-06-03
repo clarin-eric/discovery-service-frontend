@@ -184,7 +184,7 @@ const idp_list = (state = initialIdpState, action) => {
             //  https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue
             //
             //Example with unity auto login:
-            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue
+            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue&siginId=12345&debug=true&noredirect=true
             //Example without unity auto login:
             //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3FIdPselected%3Dtrue
             log_debug("SP return=", state.sp_return);
@@ -194,14 +194,12 @@ const idp_list = (state = initialIdpState, action) => {
                 const searchParams = new URLSearchParams(search);
 
                 //Add any otherQueryParams to the return url
-                /*
                 log_info("Added to otherQueryParams: ", state.otherQueryParams);
                 if(state.otherQueryParams) {
                     for (const [key, value] of Object.entries(state.otherQueryParams)) {
                         searchParams.set(key, value);
                     }
                 }
-                */
 
                 //Build the base return url. Keep all query parameters (if any) and add the selected entityId
                 searchParams.set("entityID", action.entityId);
@@ -351,6 +349,7 @@ function getCountries(list) {
  * @returns {*}
  */
 function filterByName(pattern, list) {
+    console.log("filterByName: pattern="+pattern+", list=", list);
     let filtered = list;
     if(pattern.length > filter_pattern_character_treshhold) {
         let custom_filtered = []
@@ -360,11 +359,15 @@ function filterByName(pattern, list) {
                 let added = false;
                 for (let j = 0; j < idp.titles.length && !added; j++) {
                     let title = idp.titles[j].value;
+
                     //let result = title.match(pattern, "i");
                     let result = title.match(new RegExp(pattern, "i"));
                     if (result) {
+                        console.log("Title ("+title+") added by filter: "+pattern);
                         custom_filtered.push(idp)
                         added = true;
+                    } else {
+                        console.log("Title ("+title+") discarded by filter: "+pattern);
                     }
                 }
             }
