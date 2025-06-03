@@ -349,7 +349,7 @@ function getCountries(list) {
  * @returns {*}
  */
 function filterByName(pattern, list) {
-    console.log("filterByName: pattern="+pattern+", list=", list);
+    log_debug("filterByName: pattern="+pattern+", list=", list);
     let filtered = list;
     if(pattern.length > filter_pattern_character_treshhold) {
         let custom_filtered = []
@@ -363,11 +363,11 @@ function filterByName(pattern, list) {
                     //let result = title.match(pattern, "i");
                     let result = title.match(new RegExp(pattern, "i"));
                     if (result) {
-                        console.log("Title ("+title+") added by filter: "+pattern);
+                        log_debug("Title ("+title+") added by filter: "+pattern);
                         custom_filtered.push(idp)
                         added = true;
                     } else {
-                        console.log("Title ("+title+") discarded by filter: "+pattern);
+                        log_debug("Title ("+title+") discarded by filter: "+pattern);
                     }
                 }
             }
