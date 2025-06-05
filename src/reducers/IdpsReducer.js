@@ -244,13 +244,16 @@ const idp_list = (state = initialIdpState, action) => {
 
             //We expect an SP entity ID or uy_auto_login=true from the return parameter
             if ((!state.sp_entity_id && !action.sp_entity_id) && !unityAutoLogin) {
-                errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
+                //errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
+                addError(errors, "ERROR_NO_SP_ENTITY_ID", "No entityID and no autologin provided by service provider.");
             }
             if (!state.sp_return && !action.sp_return) {
-                errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+                //errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+                addError(errors, "ERROR_NO_RETURN_URL", "No return url provided by service provider.");
             }
             if(!isValidUrl(action.sp_return)) {
-                errors.push({"code": "ERROR_INVALID_RETURN_URL", "message": "Return url is not a valid URL."});
+                //errors.push({"code": "ERROR_INVALID_RETURN_URL", "message": "Return url is not a valid URL."});
+                addError(errors, "ERROR_INVALID_RETURN_URL", "Return url is not a valid URL.");
             }
 
             let new_sp_entity_id = state.sp_entity_id;
@@ -263,8 +266,9 @@ const idp_list = (state = initialIdpState, action) => {
                 new_sp_return = action.sp_return;
             }
 
+            console.log("Errors: ", errors);
             return Object.assign({}, state, {
-                errors: state.errors.concat(errors),
+                errors: mergeErrors(state.errors, errors),//state.errors.concat(errors),
                 sp_entity_id: new_sp_entity_id,
                 sp_return: new_sp_return,
                 otherQueryParams: action.otherQueryParams
@@ -272,6 +276,44 @@ const idp_list = (state = initialIdpState, action) => {
         default:
             return state
     }
+}
+
+/**
+ * Add the error to the list if it is not already in the list
+ * @param error_code
+ * @param error_msg
+ * @param errors
+ * @returns {*}
+ */
+function addError(errors, error_code, error_msg) {
+    if(!errors) {
+        return errors;
+    }
+    let found = false;
+    for(let i = 0; i < errors.length && !found; i++) {
+        if(errors[i].code === error_code) {
+            found = true;
+        }
+    }
+
+    if(!found) {
+        errors.push({"code": error_code, "message": error_msg});
+    }
+    return errors
+}
+
+/**
+ * Merge two arrays with errors and skip any duplicates
+ * @param old_errors
+ * @param new_errors
+ * @returns {*[]}
+ */
+function mergeErrors(old_errors, new_errors) {
+    const errors = Object.assign([], old_errors);
+    new_errors.forEach(new_error => {
+        addError(errors, new_error.code, new_error.message);
+    });
+    return errors;
 }
 
 function isValidUrl(string) {

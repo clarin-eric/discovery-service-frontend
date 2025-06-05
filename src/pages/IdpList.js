@@ -219,7 +219,6 @@ const FiltersSection = () => {
                     </OverlayTrigger>
                 </Col>
                 <Col md={{span: 2, offset: 0}} sm={{span: 2, offset: 0}} xs={false} className="text-right">
-
                     <ButtonGroup name="layout" size="sm">
                         <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView} trigger={tt_showTriggerEvents}>
                             <Button variant={filter.view === VIEW_GRID ? "primary" : "outline-primary"}
@@ -234,7 +233,6 @@ const FiltersSection = () => {
                             </Button>
                         </OverlayTrigger>
                     </ButtonGroup>
-
                 </Col>
             </Row>
         </Col>
@@ -415,9 +413,9 @@ const IdpView = (props)  => {
 
     log_debug("Height="+height);
 
-    const filtered = idps.filtered;// applyFilter(idps.filtered, filter);
-    //console.log("Filtered:", filtered);
-    //console.log("Selected:", idps.selected_idp);
+    //Filter is applied in ../reducers/index.js
+    const filtered = idps.filtered;
+
     return (
         <div className="idpList">
             <Row>
