@@ -21,7 +21,7 @@ const Idp = (props) => {
         const image_height=25
 
         var logo = null;
-        if(props.icon && props.icon.url !== "") {
+        if(props.icon && props.icon.url && props.icon.url !== "") {
             logo =  <Image fluid src={props.icon.url} className="logo" alt="Logo" onError={(event)=>event.target.style.display='none'} />
         }
 
@@ -40,7 +40,7 @@ const Idp = (props) => {
         return (
             <Row
                 className={classname+" d-flex align-items-center"}
-                onClick={e => {setCookie("entityid", props.entityID, {path: "/"}); dispatch(idpClick({}, props.entityID));}}
+                onClick={e => {setCookie("entityid", props.entityID, {path: "/"}); dispatch(idpClick({}, props.entityID, props.digest, props.digestIndex));}}
             >
                 <Col xs={8}>
                     <div className="idp-title">{props.name}</div>
@@ -59,12 +59,14 @@ const Idp = (props) => {
 
 Idp.propTypes = {
     name: PropTypes.string.isRequired,
+    digest: PropTypes.string,
+    digestIndex: PropTypes.number,
     country_code: PropTypes.string.isRequired,
     country_label: PropTypes.string.isRequired,
     icon: PropTypes.shape({
-        url: PropTypes.string.isRequired,
-        width: PropTypes.number.isRequired,
-        height: PropTypes.number.isRequired,
+        url: PropTypes.string,
+        width: PropTypes.number,
+        height: PropTypes.number
     }),
     layout: PropTypes.number.isRequired,
 };
