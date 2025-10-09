@@ -17,7 +17,7 @@ const postProcessFilter = (state, action) => {
             //Generate new idp_list state with filtered and sorted list of idps
             const newIdPListState = Object.assign({}, state.idp_list, {
                 filtered: getProcessedFilteredAndSortedIdpList(state.idp_list.items, state.filter)
-            })
+            });
             //Merge full state with updated idp_list state
             return Object.assign(
                 {},

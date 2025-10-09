@@ -1,17 +1,17 @@
-export function log_debug(message) {
+export function log_debug(message, ...args) {
     if(window.config.debug) {
-        console.log("[DEBUG] "+message);
+        console.log("[DEBUG] "+message, ...args);
     }
 }
 
-export function log_info(message) {
-    console.log("[ INFO] "+message);
+export function log_info(message, ...args) {
+    console.log("[ INFO] "+message, ...args);
 }
 
-export function log_warn(message) {
-    console.log("[ WARN] "+message);
+export function log_warn(message, ...args) {
+    console.log("[ WARN] "+message, ...args);
 }
 
-export function log_error(message) {
-    console.error("[ERROR] "+message);
+export function log_error(message, ...args) {
+    console.error("[ERROR] "+message, ...args);
 }

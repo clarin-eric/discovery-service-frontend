@@ -69,6 +69,10 @@ Process IDP items to sanitize titles and resolve country_code to country_label
  */
 const processIdp = (idp_in) => {
     let ext_idp = null;
+
+//    console.log("Idp_in: ", idp_in);
+//    console.log("Ext_idp: ", ext_idp);
+
     if (idp_in && idp_in.entityID) {
         ext_idp = idp_in;
         if(!ext_idp.titles) {
@@ -87,13 +91,14 @@ const processIdp = (idp_in) => {
         ext_idp["country_label"] = country_name
 
         if (country_name === "Unknown") {
-            log_warn("Skipping idp ("+idp_in.entityID+") with country name = Unkown.");
+            log_warn("Skipping idp ("+idp_in.entityID+") with country name = Unknown.");
             ext_idp = null
         } else if (ext_idp["display_title"] === null) {
             log_warn("Skipping idp ("+idp_in.entityID+") without display title.");
             ext_idp = null
         }
     }
+
     return ext_idp
 }
 
@@ -109,16 +114,13 @@ const filterIdps = (idps, activeFilter) => {
         return idps;
     }
 
-    log_debug("Combining filters, pattern="+activeFilter.text+", country="+activeFilter.country+", #unfiltered entries="+idps.length);
     let filtered = idps;
     if (activeFilter.country) {
         filtered = filterByCountry(activeFilter.country, idps)
     }
-    log_debug("filtered by country: "+filtered.length);
     if(activeFilter.text) {
         filtered = filterByName(activeFilter.text, filtered)
     }
-    log_debug("filtered by pattern: "+filtered.length);
 
     return filtered
 }
@@ -176,12 +178,49 @@ const idp_list = (state = initialIdpState, action) => {
                 show: state.show+12
             })
         case CLICKED_IDP:
+            //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_select_authn=saml._entryFromMetadata_[MD5 Hex hash oh IdP entityID]%2B1.&uy_auto_login=true&IdPselected=true&signInId=4b4fc889-b850-4d1a-bf50-cc7f04d72353
+            //https://idm.clarin-dev.eu/saml-idp/saml2idp-web-entry?uy_auto_login=true&IdPselected=true
+            //url encoded (use https://www.urlencoder.org/):
+            //  https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue
+            //
+            //Example with unity auto login:
+            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3Fuy_auto_login%3Dtrue%26IdPselected%3Dtrue&siginId=12345&debug=true&noredirect=true
+            //Example without unity auto login:
+            //  http://localhost:3000/?entityID=https%3A%2F%2Fsp.vcr.clarin.eu&return=https%3A%2F%2Fidm.clarin-dev.eu%2Fsaml-idp%2Fsaml2idp-web-entry%3FIdPselected%3Dtrue
+            log_debug("SP return=", state.sp_return);
             if (state.sp_return) {
-                //TODO: check if ? exists in return url. If yes append with &, otherwise append with ?
-                var redirect_url = state.sp_return+"&entityID=" + action.entityId;
-                window.location.href = redirect_url;
+                const base = state.sp_return.split("?")[0];
+                const search = state.sp_return.split("?")[1];
+                const searchParams = new URLSearchParams(search);
+
+                //Add any otherQueryParams to the return url
+                log_info("Added to otherQueryParams: ", state.otherQueryParams);
+                if(state.otherQueryParams) {
+                    for (const [key, value] of Object.entries(state.otherQueryParams)) {
+                        searchParams.set(key, value);
+                    }
+                }
+
+                //Build the base return url. Keep all query parameters (if any) and add the selected entityId
+                searchParams.set("entityID", action.entityId);
+
+                //If unity auto login was requested (uy_auto_login query parameter is present), add the digest and index
+                //for the selected idp.
+                log_debug("Unity auto login? " + searchParams.has("uy_auto_login"), searchParams);
+                if(searchParams.has("uy_auto_login") && action.digest) {
+                    searchParams.set("uy_select_authn", "saml._entryFromMetadata_"+action.digest+"+"+action.digestIndex+".");
+                    searchParams.set("IdPselected", true);
+                } else if(searchParams.has("uy_auto_login") && !action.digest) {
+                    log_warn("Unity auto login was selected (uy_auto_login=true), but no idp digest data is available.");
+                }
+
+                const redirect_url = base + "?" + searchParams.toString();
+                log_debug("Redirect_url: ", redirect_url);
+                if(window.config.redirect) {
+                    window.location.href = redirect_url;
+                }
             } else {
-                log_warn("No SP return url found");
+                log_warn("No SP return url found. Action: ", action);
             }
             return state
         case SELECTED_IDP:
@@ -191,11 +230,30 @@ const idp_list = (state = initialIdpState, action) => {
             })
         case SET_QUERY_PARAMETERS:
             var errors = [];
-            if (!state.sp_entity_id && !action.sp_entity_id) {
-                    errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID provided by service provider."});
+            console.log("SET_QUERY_PARAMETERS: ", action);
+
+            let unityAutoLogin = false;
+            //Fetch uy_auto_login parameter from return url if it exists
+            if(action.sp_return) {
+                const returnSearch = action.sp_return.split("?")[1];
+                const returnSearchParams = new URLSearchParams(returnSearch);
+                if(returnSearchParams.has("uy_auto_login") && returnSearchParams.get("uy_auto_login") === "true") {
+                    unityAutoLogin = true;
+                }
+            }
+
+            //We expect an SP entity ID or uy_auto_login=true from the return parameter
+            if ((!state.sp_entity_id && !action.sp_entity_id) && !unityAutoLogin) {
+                //errors.push({"code": "ERROR_NO_SP_ENTITY_ID", "message": "No entityID and no autologin provided by service provider."});
+                addError(errors, "ERROR_NO_SP_ENTITY_ID", "No entityID and no autologin provided by service provider.");
             }
             if (!state.sp_return && !action.sp_return) {
-                errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+                //errors.push({"code": "ERROR_NO_RETURN_URL", "message": "No return url provided by service provider."});
+                addError(errors, "ERROR_NO_RETURN_URL", "No return url provided by service provider.");
+            }
+            if(!isValidUrl(action.sp_return)) {
+                //errors.push({"code": "ERROR_INVALID_RETURN_URL", "message": "Return url is not a valid URL."});
+                addError(errors, "ERROR_INVALID_RETURN_URL", "Return url is not a valid URL.");
             }
 
             let new_sp_entity_id = state.sp_entity_id;
@@ -208,13 +266,62 @@ const idp_list = (state = initialIdpState, action) => {
                 new_sp_return = action.sp_return;
             }
 
+            console.log("Errors: ", errors);
             return Object.assign({}, state, {
-                errors: state.errors.concat(errors),
+                errors: mergeErrors(state.errors, errors),//state.errors.concat(errors),
                 sp_entity_id: new_sp_entity_id,
-                sp_return: new_sp_return
+                sp_return: new_sp_return,
+                otherQueryParams: action.otherQueryParams
             })
         default:
             return state
+    }
+}
+
+/**
+ * Add the error to the list if it is not already in the list
+ * @param error_code
+ * @param error_msg
+ * @param errors
+ * @returns {*}
+ */
+function addError(errors, error_code, error_msg) {
+    if(!errors) {
+        return errors;
+    }
+    let found = false;
+    for(let i = 0; i < errors.length && !found; i++) {
+        if(errors[i].code === error_code) {
+            found = true;
+        }
+    }
+
+    if(!found) {
+        errors.push({"code": error_code, "message": error_msg});
+    }
+    return errors
+}
+
+/**
+ * Merge two arrays with errors and skip any duplicates
+ * @param old_errors
+ * @param new_errors
+ * @returns {*[]}
+ */
+function mergeErrors(old_errors, new_errors) {
+    const errors = Object.assign([], old_errors);
+    new_errors.forEach(new_error => {
+        addError(errors, new_error.code, new_error.message);
+    });
+    return errors;
+}
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (e) {
+        return false;
     }
 }
 
@@ -284,6 +391,7 @@ function getCountries(list) {
  * @returns {*}
  */
 function filterByName(pattern, list) {
+    log_debug("filterByName: pattern="+pattern+", list=", list);
     let filtered = list;
     if(pattern.length > filter_pattern_character_treshhold) {
         let custom_filtered = []
@@ -293,11 +401,15 @@ function filterByName(pattern, list) {
                 let added = false;
                 for (let j = 0; j < idp.titles.length && !added; j++) {
                     let title = idp.titles[j].value;
+
                     //let result = title.match(pattern, "i");
                     let result = title.match(new RegExp(pattern, "i"));
                     if (result) {
+                        log_debug("Title ("+title+") added by filter: "+pattern);
                         custom_filtered.push(idp)
                         added = true;
+                    } else {
+                        log_debug("Title ("+title+") discarded by filter: "+pattern);
                     }
                 }
             }

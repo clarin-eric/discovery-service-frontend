@@ -72,11 +72,20 @@ const IdpGridOrListContainer = (props) => {
     const items = [];
     for(let i = index; i < filtered.length && i < show; i++) {
         const idp = filtered[i];
-        items.push(
-            <Col lg={props.bootstrap_grid.lg} md={props.bootstrap_grid.md} sm={props.bootstrap_grid.sm} xs={props.bootstrap_grid.xs} key={idp.entityID} className="minimal-padding">
-                <Idp entityID={idp.entityID} name={idp.display_title} country_code={idp.country_code} country_label={idp.country_label} icon={idp.icon} layout={props.layout}/>
-            </Col>
-        );
+        if(idp !== null) {
+            items.push(
+                <Col lg={props.bootstrap_grid.lg} md={props.bootstrap_grid.md} sm={props.bootstrap_grid.sm}
+                     xs={props.bootstrap_grid.xs} key={idp.entityID} className="minimal-padding">
+                    <Idp entityID={idp.entityID}
+                         digest={idp.digest}
+                         digestIndex={idp.digest_index}
+                         name={idp.display_title} country_code={idp.country_code}
+                         country_label={idp.country_label} icon={idp.icon} layout={props.layout}/>
+                </Col>
+            );
+        } else {
+            console.log("Idp is null, index="+i+", filtered=". filtered);
+        }
     }
 
     return (
@@ -177,7 +186,7 @@ const FiltersSection = () => {
     //Suffering from Scrollbar jitter on render of popovers and tooltips
     //See: https://github.com/react-bootstrap/react-bootstrap/issues/6563#issuecomment-1435500271
     //Side effect that first tooltip is always shown on first page load
-    const tt_showTriggerEvents = ['hover'];
+    const tt_showTriggerEvents = ['hover', 'focus'];
     const tt_Style = {position: "fixed"};
     const tooltipSearchPattern = (<Tooltip id="tooltip" style={tt_Style}>Search for a specific identity provider</Tooltip>)
     const tooltipSearchCountry = (<Tooltip id="tooltip" style={tt_Style}>Filter identity providers by country</Tooltip>)
@@ -210,7 +219,6 @@ const FiltersSection = () => {
                     </OverlayTrigger>
                 </Col>
                 <Col md={{span: 2, offset: 0}} sm={{span: 2, offset: 0}} xs={false} className="text-right">
-
                     <ButtonGroup name="layout" size="sm">
                         <OverlayTrigger placement="bottom" overlay={tooltipToggleGridView} trigger={tt_showTriggerEvents}>
                             <Button variant={filter.view === VIEW_GRID ? "primary" : "outline-primary"}
@@ -225,7 +233,6 @@ const FiltersSection = () => {
                             </Button>
                         </OverlayTrigger>
                     </ButtonGroup>
-
                 </Col>
             </Row>
         </Col>
@@ -292,6 +299,9 @@ const ErrorsSection = (props) => {
             showUrlQueryParamErrorMsg = true;
             console.error("Error regarding URL query parameters: ", err)
         } else if (err.code === "ERROR_NO_SP_ENTITY_ID") {
+            showUrlQueryParamErrorMsg = true;
+            console.error("Error regarding URL query parameters: ", err)
+        } else if (err.code === "ERROR_INVALID_RETURN_URL") {
             showUrlQueryParamErrorMsg = true;
             console.error("Error regarding URL query parameters: ", err)
         }
@@ -403,7 +413,8 @@ const IdpView = (props)  => {
 
     log_debug("Height="+height);
 
-    const filtered = idps.filtered;// applyFilter(idps.filtered, filter);
+    //Filter is applied in ../reducers/index.js
+    const filtered = idps.filtered;
 
     return (
         <div className="idpList">
@@ -426,6 +437,8 @@ const IdpView = (props)  => {
                             layout={s_selected}
                             element={<Idp
                                 entityID={idps.selected_idp.entityID}
+                                digest={idps.selected_idp.digest}
+                                digestIndex={idps.selected_idp.digest_index}
                                 name={idps.selected_idp.display_title}
                                 country_code={idps.selected_idp.country_code}
                                 country_label={idps.selected_idp.country_label}

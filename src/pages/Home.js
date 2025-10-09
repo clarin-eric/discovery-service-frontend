@@ -14,7 +14,14 @@ const Home = (props) => {
 
     React.useEffect(() => {
         const query = queryString.parse(window.location.search, { ignoreQueryPrefix: true });
-        dispatch(createQueryParametersAction(query.entityID, query.return));
+        let remainder = {};
+        for (const [key, value] of Object.entries(query)) {
+            //if(key !== "entityID" && key !== "return" && key !== "uy_auto_login" && key !== "debug" && key !== "noredirect") {
+            if(key !== "entityID" && key !== "return" && key !== "debug" && key !== "noredirect") {
+                remainder[key] = value;
+            }
+        }
+        dispatch(createQueryParametersAction(query.entityID, query.return, null, remainder));
         dispatch(fetchIdps(urlParams.id))
     }, [dispatch, urlParams]);
 

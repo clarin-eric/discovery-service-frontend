@@ -41,6 +41,7 @@ export function fetchIdps(id) {
 
     let url = "";
     if (window.config.endpoints.hasOwnProperty(id)) {
+        log_debug("Endpoints: ", window.config.endpoints);
         url = window.config.endpoints[id].url;
     } else {
         log_info("No valid feed id specified, falling back to default clarin sp feed...");
@@ -50,7 +51,7 @@ export function fetchIdps(id) {
            }
         };
     }
-    log_debug("Feed url="+url);
+    log_info("Feed url="+url);
 
     return (dispatch, getState) => {
         const { filter } = getState();
@@ -61,10 +62,12 @@ export function fetchIdps(id) {
     }
 }
 
-export function idpClick(cookies, entityId) {
+export function idpClick(cookies, entityId, digest, digestIndex) {
     return {
         type: CLICKED_IDP,
         entityId: entityId,
+        digest: digest,
+        digestIndex: digestIndex,
         cookies: cookies
     }
 }
@@ -76,10 +79,12 @@ export function selectIdp(entityId) {
     }
 }
 
-export function createQueryParametersAction(sp_entity_id, sp_return) {
+export function createQueryParametersAction(sp_entity_id, sp_return, unityAutoLogin, otherQueryParams) {
     return {
         type: SET_QUERY_PARAMETERS,
         sp_entity_id: sp_entity_id,
-        sp_return: sp_return
+        sp_return: sp_return,
+        unityAutoLogin: unityAutoLogin,
+        otherQueryParams: otherQueryParams
     }
 }
