@@ -19,6 +19,9 @@ import PropTypes from "prop-types";
 import { VIEW_LIST, VIEW_GRID } from '../Constants';
 import {filterOnCountry, filterOnText, setView} from "../actions/FilterActions";
 import {idpClick, selectIdp} from "../actions";
+import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
+import Badge from 'react-bootstrap/Badge';
 
 const applyFilter = (list, filter) => {
     const filtered = [];
@@ -289,6 +292,11 @@ const FiltersSection2 = () => {
 }
 
 const ErrorsSection = (props) => {
+    const [show, setShow] = useState(true);
+
+    const handleClose = () => setShow(false);
+    //const handleShow = () => setShow(true);
+
     let error_list = props.errors;
     let errors = [];
 
@@ -308,13 +316,50 @@ const ErrorsSection = (props) => {
     }
 
     if(showUrlQueryParamErrorMsg) {
-        errors.push(
-            <p key={err.code+"_"+i} className="text-small text-center error">
-                Warning: It appears as if you visited this page directly, this will not work. Please
-                login <a href="https://www.clarin.eu/content/easy-access-protected-resources">via the service</a> you
-                are trying to access.
-            </p>
-        )
+        if(window.config.showMissingQueryParamWarning) {
+            errors.push(
+                <Col key={err.code} sm={{span: 10, offset: 1}} className="error">
+                    <Row>
+                        <Col sm={{span: 2}} className="text-left">Warning:</Col>
+                        <Col sm={{span: 10}} className="text-small text-left">
+                            <p>There is an issue with how you arrived at this page. This discovery service must be
+                                accessed through the main service and cannot be accessed directly.</p>
+                            <p>Please login via the service you are trying to access.</p>
+                            <p>A non-exhaustive list of our services can be found on our <a
+                                href="https://www.clarin.eu/content/easy-access-protected-resources">Easy Access to
+                                Protectd Resources</a> page.</p>
+                        </Col>
+                    </Row>
+                </Col>
+            )
+        }
+
+        //Add warning bootstrap modal
+        if(window.config.showMissingQueryParamWarningModal) {
+            errors.push(
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header>
+                        <Modal.Title><Badge pill bg="danger">Warning</Badge></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>There is an issue with how you arrived at this page. This discovery service must be accessed
+                            through the main service and cannot be accessed directly.</p>
+                        <p>Please login via the service you are trying to access.</p>
+                        <p>A non-exhaustive list of our services can be found on our <a
+                            href="https://www.clarin.eu/content/easy-access-protected-resources">Easy Access to
+                            Protected Resources</a> page.</p>
+                        <p>If the issue persists, please contact <a href="mailto:sysops@clarin.eu">sysops@clarin.eu</a>
+                        </p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            );
+        }
+
     }
 
     return errors;
