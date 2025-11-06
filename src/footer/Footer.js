@@ -12,7 +12,7 @@ const Footer = () => {
                     </Col>
                     <Col lg={6}>
                         <span className="footer-fineprint">
-                            Service provided by <a href={window.config.website}>CLARIN</a>
+                            Service provided by <a href={window.config.website}>{window.config.website_label}</a>
                         </span>
                     </Col>
                     <Col lg={3} className="text-right">

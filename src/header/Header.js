@@ -1,6 +1,4 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavItem from 'react-bootstrap/NavItem';
@@ -14,9 +12,7 @@ const Header = () => {
         <Navbar bg="light">
             <Container>
                 <Navbar.Brand>
-                    <a href="/"><FontAwesomeIcon size="lg" icon={faIdCard} />
-                        <span className="title">Sign in via the CLARIN Service Provider Federation</span>
-                    </a>
+                    { window.config.headerUrl ? <a href="/"><TitleAndIcon /></a> : <TitleAndIcon /> }
                 </Navbar.Brand>
                 <Nav></Nav>
                 <Nav className="justify-content-end">
@@ -26,6 +22,15 @@ const Header = () => {
                 </Nav>
             </Container>
         </Navbar>
+    );
+}
+
+const TitleAndIcon = () => {
+    return (
+        <>
+            <FontAwesomeIcon size="lg" icon={faIdCard} />
+            <span className="title">Sign in via the CLARIN Service Provider Federation</span>
+        </>
     );
 }
 
