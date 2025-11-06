@@ -29,6 +29,10 @@ html, body {
   background-color: #fff;
 }
 
+.logo {
+        object-fit: contain;
+}
+
 .title {
   margin-left: 5px;
 }
