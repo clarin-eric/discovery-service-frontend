@@ -15,4 +15,5 @@ var config = {
     "piwik_id": -1,
     "showMissingQueryParamWarning": true,
     "showMissingQueryParamWarningModal": true,
+    "headerUrl": "/"
 }
