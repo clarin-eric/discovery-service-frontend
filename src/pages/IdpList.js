@@ -327,7 +327,7 @@ const ErrorsSection = (props) => {
                             <p>Please login via the service you are trying to access.</p>
                             <p>A non-exhaustive list of our services can be found on our <a
                                 href="https://www.clarin.eu/content/easy-access-protected-resources">Easy Access to
-                                Protectd Resources</a> page.</p>
+                                Protected Resources</a> page.</p>
                         </Col>
                     </Row>
                 </Col>
