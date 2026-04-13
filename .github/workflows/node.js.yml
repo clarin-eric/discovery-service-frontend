@@ -8,10 +8,18 @@ on:
   pull_request:
   release:
 
+# Prevent redundant builds on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   prepare:
     name: "Prepare"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
@@ -28,14 +36,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     env:
       TARBALL_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -77,6 +85,7 @@ jobs:
       - name: Upload Release Asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           gh release upload "$TAG_NAME" "discovery-service-frontend-${TARBALL_VERSION}.tar.gz" --clobber
 
