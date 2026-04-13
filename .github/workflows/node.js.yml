@@ -9,9 +9,9 @@ on:
   release:
 
 # Prevent redundant builds on the same branch
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+#concurrency:
+#  group: ${{ github.workflow }}-${{ github.ref }}
+#  cancel-in-progress: true
 
 permissions:
   contents: read
